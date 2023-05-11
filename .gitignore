@@ -3,5 +3,6 @@
 # But not these files...
 !.gitignore
 
-!nvim/*
 !nvim/
+!nvim/*
+!nvim/vscode/settings.lua
