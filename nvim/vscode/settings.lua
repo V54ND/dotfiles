@@ -94,8 +94,8 @@ vim.api.nvim_set_keymap('x', '<S-l>', "<cmd>call VSCodeNotify('workbench.action.
   { noremap = true, silent = true })
 
 -- Bind C-/ to vscode commentary since calling from vscode produces double comments due to multiple cursors
-vim.api.nvim_set_keymap('x', '<C-/>', "lua VSCodeNotifyVisual('editor.action.blockComment')<CR>", { silent = true })
-vim.api.nvim_set_keymap('n', '<C-/>', "lua VSCodeNotifyVisual('editor.action.blockComment')<CR>", { silent = true })
+vim.api.nvim_set_keymap('x', '<C-/>', "gcc", { silent = true })
+vim.api.nvim_set_keymap('n', '<C-/>', "gcc", { silent = true })
 
 -- After triggeting equal width return to custtom widths
 vim.api.nvim_set_keymap("n", "<C-w>_", ":<C-u>call VSCodeNotify('workbench.action.toggleEditorWidths')<CR>",
