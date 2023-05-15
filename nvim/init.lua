@@ -12,6 +12,7 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 vim.g.coc_global_extensions = { 'coc-tsserver', 'coc-prettier' }
+-- use system clipboard
 vim.api.nvim_set_option("clipboard", "unnamed")
 
 if vim.g.vscode ~= nil then
