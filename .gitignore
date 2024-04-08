@@ -5,4 +5,5 @@
 
 !nvim/
 !nvim/*
-!nvim/vscode/settings.lua
+!nvim/**/*
+!nvim/**/**/*
