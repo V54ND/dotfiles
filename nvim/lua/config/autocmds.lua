@@ -4,3 +4,10 @@
 
 
 vim.api.nvim_set_option("clipboard", "unnamed")
+
+vim.api.nvim_exec([[
+  augroup autosave
+    autocmd!
+    autocmd InsertLeave,FocusLost * silent! w
+  augroup END
+]], false) -- autosave

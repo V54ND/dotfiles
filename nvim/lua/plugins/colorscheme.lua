@@ -8,5 +8,11 @@ return {
 				transparent = true,
 			}
 		end,
-	},
+    },
+	{
+		"LazyVim/LazyVim",
+		opts = {
+			colorscheme = "solarized-osaka",
+		},
+	}
 }
