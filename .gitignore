@@ -3,7 +3,12 @@
 # But not these files...
 !.gitignore
 
+!README.md
+
 !nvim/
 !nvim/*
 !nvim/**/*
 !nvim/**/**/*
+
+!wezterm
+!wezterm/*
