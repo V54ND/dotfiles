@@ -22,13 +22,18 @@ Terminal emulator that I use for Windows
 ## Choco install command
 
 ```
-choco install bat fd fzf ripgrep zoxide ffmpeg imagemagick nvm -y
+choco install bat fd fzf ripgrep zoxide ffmpeg imagemagick nvm neofetch -y
 ```
 
 ## Scoop install command
 
 ```
-scoop install bat fd fzf ripgrep zoxide ffmpeg imagemagick nvm
+scoop install bat fd fzf ripgrep zoxide ffmpeg imagemagick nvm neofetch
+```
+
+## Homebrew install command
+```
+brew install bat fd fzf ripgrep zoxide ffmpeg imagemagick nvm neofetch
 ```
 
 ## Path
