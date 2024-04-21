@@ -5,10 +5,18 @@
 
 !README.md
 
-!nvim/
-!nvim/*
-!nvim/**/*
-!nvim/**/**/*
 
-!wezterm
-!wezterm/*
+!.gitignore
+!.config/
+.config/*
+!.config/nvim/
+!.config/nvim/*
+!.config/nvim/**/*
+!.config/nvim/**/**/*
+
+
+!.config/wezterm/
+!.config/wezterm/*
+
+
+!.bashrc
