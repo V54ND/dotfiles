@@ -1,0 +1,22 @@
+# Ignore everything
+*
+# But not these files...
+!.gitignore
+
+!README.md
+
+
+!.gitignore
+!.config/
+.config/*
+!.config/nvim/
+!.config/nvim/*
+!.config/nvim/**/*
+!.config/nvim/**/**/*
+
+
+!.config/wezterm/
+!.config/wezterm/*
+
+
+!.bashrc
