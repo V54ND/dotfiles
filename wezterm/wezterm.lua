@@ -11,6 +11,15 @@ end)
 local config = wezterm.config_builder()
 
 config.color_scheme = "AdventureTime"
+config.color_scheme = "Selenized Dark (Gogh)"
+config.color_scheme = "Japanesque"
+config.color_scheme = "UnderTheSea"
+config.color_scheme = "Unsifted Wheat (terminal.sexy)"
+config.color_scheme = "nightfox"
+config.color_scheme = "Navy and Ivory (terminal.sexy)"
+
+
+
 
 config.window_background_opacity = 0.9
 
