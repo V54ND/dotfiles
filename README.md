@@ -22,7 +22,7 @@ Terminal emulator that I use for Windows
 ## Choco install command
 
 ```
-choco install bat fd fzf ripgrep zoxide ffmpeg imagemagick nvm neofetch -y
+choco install bat fd fzf ripgrep zoxide ffmpeg imagemagick nvm neovim --pre neofetch mingw -y
 ```
 
 ## Scoop install command
@@ -38,4 +38,9 @@ brew install bat fd fzf ripgrep zoxide ffmpeg imagemagick nvm neofetch
 
 ## Path
 
-XDG_CONFIG_HOME needs to be setuped in env variables as path to `~Users\YourUsername\.config\`
+`XDG_CONFIG_HOME` needs to be setuped in env variables as path to 
+
+### For Windows
+```
+%USERPROFILE%\.config
+```
