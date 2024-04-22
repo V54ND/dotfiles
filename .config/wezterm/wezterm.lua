@@ -17,9 +17,8 @@ config.color_scheme = "UnderTheSea"
 config.color_scheme = "Unsifted Wheat (terminal.sexy)"
 config.color_scheme = "nightfox"
 config.color_scheme = "Navy and Ivory (terminal.sexy)"
-config.color_scheme = 'Ayu Mirage (Gogh)'
-config.color_scheme = 'Catppuccin Macchiato (Gogh)'
-config.color_scheme = 'Mirage'
+config.color_scheme = "Ayu Mirage (Gogh)"
+config.color_scheme = "Catppuccin Macchiato (Gogh)"
 
 config.window_background_opacity = 0.9
 

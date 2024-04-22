@@ -1,8 +1,6 @@
 alias ll="ls -l"
 
 alias gf="git fetch"
-alias gp="git pull"
-
-
+alias gl="git pull"
 
 eval "$(zoxide init bash)"
