@@ -10,15 +10,7 @@ end)
 
 local config = wezterm.config_builder()
 
-config.color_scheme = "AdventureTime"
-config.color_scheme = "Selenized Dark (Gogh)"
-config.color_scheme = "Japanesque"
-config.color_scheme = "UnderTheSea"
-config.color_scheme = "Unsifted Wheat (terminal.sexy)"
-config.color_scheme = "nightfox"
-config.color_scheme = "Navy and Ivory (terminal.sexy)"
 config.color_scheme = "Ayu Mirage (Gogh)"
-config.color_scheme = "Catppuccin Macchiato (Gogh)"
 
 config.window_background_opacity = 0.9
 
@@ -37,6 +29,6 @@ config.default_prog = gitbash
 
 config.font = wezterm.font("Iosevka Nerd Font")
 
-config.font_size = 13
+config.font_size = 14
 
 return config

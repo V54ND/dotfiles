@@ -22,7 +22,7 @@ Terminal emulator that I use for Windows
 ## Choco install command
 
 ```
-choco install bat fd fzf ripgrep zoxide ffmpeg imagemagick nvm neovim --pre neofetch mingw -y
+choco install bat fd fzf ripgrep zoxide ffmpeg imagemagick nvm neovim --pre neofetch mingw nerd-fonts-iosevka -y
 ```
 
 ## Scoop install command
