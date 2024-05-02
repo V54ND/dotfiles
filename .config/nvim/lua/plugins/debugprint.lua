@@ -23,6 +23,11 @@ return {
       toggle_comment_debug_prints = "ToggleCommentDebugPrints",
       delete_debug_prints = "DeleteDebugPrints",
     },
+    filetypes = {
+      tsx = {
+        variable_pattern = "console.log",
+      },
+    },
   },
   version = "*",
 }
