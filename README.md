@@ -18,6 +18,7 @@ Terminal emulator that I use for Windows
 - ffmpeg
 - imagemagick
 - nvm
+- jq
 
 ## Tools required for nvim config
 

@@ -10,10 +10,9 @@ end)
 
 local config = wezterm.config_builder()
 
-config.color_scheme = "Ayu Mirage (Gogh)"
+config.color_scheme = 'Jason Wryan (terminal.sexy)'
 
 config.window_background_opacity = 0.9
-
 config.launch_menu = {
 	{
 		label = "Powershell",
