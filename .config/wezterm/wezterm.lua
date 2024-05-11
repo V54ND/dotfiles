@@ -10,7 +10,7 @@ end)
 
 local config = wezterm.config_builder()
 
-config.color_scheme = 'Solarized Dark - Patched'
+config.color_scheme = 'Website (Gogh)'
 
 config.window_background_opacity = 0.9
 config.launch_menu = {
