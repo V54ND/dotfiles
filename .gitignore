@@ -20,3 +20,6 @@
 
 
 !.bashrc
+
+!clear_hosts.sh
+!fill_hosts.sh
