@@ -10,14 +10,7 @@ end)
 
 local config = wezterm.config_builder()
 
-
-
-
-config.color_scheme = 'Website (Gogh)'
-config.color_scheme = 'kanagawabones'
-config.color_scheme = 'Sandcastle (base16)'
-
-
+config.color_scheme = 'Catppuccin Frappé (Gogh)'
 
 config.window_background_opacity = 0.9
 config.launch_menu = {
