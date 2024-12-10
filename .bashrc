@@ -3,7 +3,11 @@ alias ll="ls -l"
 alias gf="git fetch"
 alias gl="git pull"
 
-alias compress='function _compress(){ ffmpeg -i "$1" -vcodec libx264 -crf 23 "${1%.*}-compressed.${1##*.}"; }; _compress'
+alias compress='function _compress(){ 
+  for file in "$@"; do 
+    ffmpeg -i "$file" -vcodec libx264 -crf 23 "${file%.*}-compressed.${file##*.}"; 
+  done 
+}; _compress'
 
 alias video_to_gif='function _video_to_gif(){ ffmpeg -i "$1" -vf "fps=10,scale=720:-1:flags=lanczos" -c:v gif "${1%.*}.gif"; }; _video_to_gif'
 
