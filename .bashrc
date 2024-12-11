@@ -1,7 +1,6 @@
 alias ll="ls -l"
 
-alias gf="git fetch"
-alias gl="git pull"
+alias gll="git fetch && git pull"
 
 alias compress='function _compress(){ 
   for file in "$@"; do 
