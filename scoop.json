@@ -1,0 +1,68 @@
+{
+    "buckets": [
+        {
+            "Name": "main",
+            "Source": "https://github.com/ScoopInstaller/Main.git",
+            "Updated": {
+                "value": "\/Date(1737750424000)\/",
+                "DisplayHint": 2,
+                "DateTime": "Friday, January 24, 2025 10:27:04 PM"
+            },
+            "Manifests": 1356
+        },
+        {
+            "Name": "extras",
+            "Source": "https://github.com/ScoopInstaller/Extras",
+            "Updated": {
+                "value": "\/Date(1737750613000)\/",
+                "DisplayHint": 2,
+                "DateTime": "Friday, January 24, 2025 10:30:13 PM"
+            },
+            "Manifests": 2122
+        }
+    ],
+    "apps": [
+        {
+            "Info": "",
+            "Source": "main",
+            "Name": "eza",
+            "Version": "0.18.11",
+            "Updated": "\/Date(1714032272369)\/"
+        },
+        {
+            "Info": "",
+            "Source": "main",
+            "Name": "jid",
+            "Version": "0.7.6",
+            "Updated": "\/Date(1714689499219)\/"
+        },
+        {
+            "Info": "",
+            "Source": "main",
+            "Name": "jq",
+            "Version": "1.7.1",
+            "Updated": "\/Date(1714689490224)\/"
+        },
+        {
+            "Info": "",
+            "Source": "main",
+            "Name": "neovim",
+            "Version": "0.9.5",
+            "Updated": "\/Date(1713711252855)\/"
+        },
+        {
+            "Info": "",
+            "Source": "main",
+            "Name": "winfetch",
+            "Version": "2.5.1",
+            "Updated": "\/Date(1714689165991)\/"
+        },
+        {
+            "Info": "",
+            "Source": "main",
+            "Name": "yt-dlp",
+            "Version": "2025.01.15",
+            "Updated": "\/Date(1737751441912)\/"
+        }
+    ]
+}

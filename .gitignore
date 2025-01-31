@@ -23,3 +23,5 @@
 
 !clear_hosts.sh
 !fill_hosts.sh
+
+!scoop.json

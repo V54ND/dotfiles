@@ -33,7 +33,7 @@ choco install bat fd fzf ripgrep zoxide ffmpeg imagemagick nvm neovim --pre neof
 ## Scoop install command
 
 ```
-scoop install bat fd fzf ripgrep zoxide ffmpeg imagemagick nvm neofetch
+scoop install bat fd fzf ripgrep zoxide ffmpeg imagemagick nvm winfetch yt-dlp jid jq git
 ```
 
 ## Homebrew install command
