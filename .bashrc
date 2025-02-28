@@ -18,13 +18,27 @@ alias logargs='_logargs'
 
 
 function _compress() { 
+  local replace=false
+  if [ "$1" == "-r" ]; then
+    replace=true
+    shift
+  fi
+
   if [ -p /dev/stdin ]; then
     while IFS= read -r file; do
-      ffmpeg -i "$file" -vcodec libx264 -crf 23 "${file%.*}-compressed.${file##*.}"
+      if [ "$replace" = true ]; then
+        ffmpeg -i "$file" -vcodec libx264 -crf 23 "${file%.*}-compressed.${file##*.}" && mv "${file%.*}-compressed.${file##*.}" "$file"
+      else
+        ffmpeg -i "$file" -vcodec libx264 -crf 23 "${file%.*}-compressed.${file##*.}"
+      fi
     done
   else
     for file in "$@"; do 
-      ffmpeg -i "$file" -vcodec libx264 -crf 23 "${file%.*}-compressed.${file##*.}"
+      if [ "$replace" = true ]; then
+        ffmpeg -i "$file" -vcodec libx264 -crf 23 "${file%.*}-compressed.${file##*.}" && mv "${file%.*}-compressed.${file##*.}" "$file"
+      else
+        ffmpeg -i "$file" -vcodec libx264 -crf 23 "${file%.*}-compressed.${file##*.}"
+      fi
     done
   fi
 }
