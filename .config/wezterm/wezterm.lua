@@ -10,7 +10,7 @@ end)
 
 local config = wezterm.config_builder()
 
-config.color_scheme = 'Ayu Mirage'
+config.color_scheme = 'Ayu Mirage (Gogh)'
 
 config.prefer_to_spawn_tabs = true
 config.window_background_opacity = 0.9
