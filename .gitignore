@@ -18,6 +18,8 @@
 !.config/wezterm/
 !.config/wezterm/*
 
+!.config/firefox/
+!.config/firefox/*
 
 !.bashrc
 
