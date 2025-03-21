@@ -66,3 +66,120 @@
         }
     ]
 }
+{
+    "buckets": [
+        {
+            "Name": "main",
+            "Source": "https://github.com/ScoopInstaller/Main.git",
+            "Updated": {
+                "value": "\/Date(1742574620000)\/",
+                "DisplayHint": 2,
+                "DateTime": "Friday, March 21, 2025 6:30:20 PM"
+            },
+            "Manifests": 1387
+        },
+        {
+            "Name": "extras",
+            "Source": "https://github.com/ScoopInstaller/Extras",
+            "Updated": {
+                "value": "\/Date(1742574563000)\/",
+                "DisplayHint": 2,
+                "DateTime": "Friday, March 21, 2025 6:29:23 PM"
+            },
+            "Manifests": 2144
+        }
+    ],
+    "apps": [
+        {
+            "Info": "",
+            "Source": "main",
+            "Name": "7zip",
+            "Version": "24.09",
+            "Updated": "\/Date(1735156456491)\/"
+        },
+        {
+            "Info": "",
+            "Source": "main",
+            "Name": "dark",
+            "Version": "3.14",
+            "Updated": "\/Date(1722366553974)\/"
+        },
+        {
+            "Info": "",
+            "Source": "extras",
+            "Name": "discord",
+            "Version": "1.0.9156-20",
+            "Updated": "\/Date(1742576334229)\/"
+        },
+        {
+            "Info": "",
+            "Source": "main",
+            "Name": "eza",
+            "Version": "0.18.11",
+            "Updated": "\/Date(1714032272369)\/"
+        },
+        {
+            "Info": "",
+            "Source": "main",
+            "Name": "jid",
+            "Version": "0.7.6",
+            "Updated": "\/Date(1714689499219)\/"
+        },
+        {
+            "Info": "",
+            "Source": "main",
+            "Name": "jq",
+            "Version": "1.7.1",
+            "Updated": "\/Date(1714689490224)\/"
+        },
+        {
+            "Info": "",
+            "Source": "main",
+            "Name": "neovim",
+            "Version": "0.9.5",
+            "Updated": "\/Date(1713711252855)\/"
+        },
+        {
+            "Info": "",
+            "Source": "main",
+            "Name": "python",
+            "Version": "3.12.4",
+            "Updated": "\/Date(1722366602574)\/"
+        },
+        {
+            "Info": "Install failed",
+            "Source": "extras",
+            "Name": "windhawk",
+            "Version": "1.5.1",
+            "Updated": "\/Date(1735156205519)\/"
+        },
+        {
+            "Info": "",
+            "Source": "main",
+            "Name": "winfetch",
+            "Version": "2.5.1",
+            "Updated": "\/Date(1714689165991)\/"
+        },
+        {
+            "Info": "",
+            "Source": "extras",
+            "Name": "xplorer",
+            "Version": "0.3.1",
+            "Updated": "\/Date(1733672512451)\/"
+        },
+        {
+            "Info": "",
+            "Source": "main",
+            "Name": "youtube-dl",
+            "Version": "2021.12.17",
+            "Updated": "\/Date(1737750792393)\/"
+        },
+        {
+            "Info": "",
+            "Source": "main",
+            "Name": "yt-dlp",
+            "Version": "2025.01.15",
+            "Updated": "\/Date(1737751441912)\/"
+        }
+    ]
+}
