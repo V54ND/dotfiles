@@ -12,7 +12,7 @@ end)
 local config = wezterm.config_builder()
 
 config.color_scheme = 'Ayu Mirage (Gogh)'
-
+config.window_close_confirmation = 'NeverPrompt'
 config.prefer_to_spawn_tabs = true
 config.window_background_opacity = 0.9
 config.launch_menu = {
