@@ -57,6 +57,8 @@ function _togif() {
 }
 alias togif='_togif'
 
+alias ncu='npx npm-check-updates -i'
+
 
 eval "$(zoxide init bash)"
 
