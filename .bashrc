@@ -1,44 +1,35 @@
+# =============================================================================
+# EZA ALIASES (modern ls replacement)
+# =============================================================================
 alias l='eza --color=always --color-scale=all --color-scale-mode=gradient --icons=always --group-directories-first'
 alias ll='eza --color=always --color-scale=all --color-scale-mode=gradient --icons=always --group-directories-first -l --git -h'
 alias la='eza --color=always --color-scale=all --color-scale-mode=gradient --icons=always --group-directories-first -a'
 alias lla='eza --color=always --color-scale=all --color-scale-mode=gradient --icons=always --group-directories-first -a -l --git -h'
 
+# =============================================================================
+# GIT ALIASES
+# =============================================================================
+
 alias gll="git fetch && git pull"
 alias gf="git fetch"
 alias gc="git checkout"
+alias gp="git push -u origin \$(git branch --show-current)"
+alias gs="git status"
+alias ga="git add"
+alias gaa="git add --all"
+alias gcm="git commit -m"
+alias gca="git commit --amend"
+alias gd="git diff"
+alias gds="git diff --staged"
+alias gl="git log --oneline -10"
+alias gb="git branch"
+alias gbd="git branch -d"
+alias gco="git checkout"
+alias gcb="git checkout -b"
 
-
-function _logargs() { 
-  local log_file="$HOME/args.log"
-  local timestamp=$(date '+%Y-%m-%d %H:%M:%S')
-  
-  # Функция для записи одного аргумента
-  _log_single() {
-    local arg="$1"
-    # Пропускаем пустые строки
-    [ -n "$arg" ] && echo "[$timestamp] Argument: $arg" >> "$log_file"
-  }
-
-  # Проверяем наличие данных в stdin или аргументов
-  if [ -p /dev/stdin ] || [ ! -t 0 ]; then
-    # Читаем из stdin (работает с ls | grep | logargs)
-    while IFS= read -r arg; do
-      # Убираем лишние пробелы и пропускаем пустые строки
-      arg=$(echo "$arg" | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
-      _log_single "$arg"
-    done
-  elif [ $# -gt 0 ]; then
-    # Обрабатываем аргументы командной строки
-    echo "[$timestamp] Arguments: $*" >> "$log_file"
-  else
-    echo "Usage: logargs <args...> or command | logargs"
-    echo "Logs arguments to ~/args.log with timestamps"
-    return 1
-  fi
-}
-alias logargs='_logargs'
-
-
+# =============================================================================
+# VIDEO COMPRESSION FUNCTION
+# =============================================================================
 function _compress() { 
   local replace=false
   local quality=23
@@ -240,19 +231,9 @@ function _compress() {
 
 alias compress='_compress'
 
-function _togif() {
-  if [ -p /dev/stdin ]; then
-    while IFS= read -r file; do
-      ffmpeg -i "$file" -vf "scale=320:-1:flags=lanczos,fps=10" -gifflags +transdiff -y "${file%.*}.gif"
-    done
-  else
-    for file in "$@"; do
-      ffmpeg -i "$file" -vf "scale=320:-1:flags=lanczos,fps=10" -gifflags +transdiff -y "${file%.*}.gif"
-    done
-  fi
-}
-alias togif='_togif'
-
+# =============================================================================
+# LOG PIPE FUNCTION (for debugging pipelines)
+# =============================================================================
 function _logpipe() {
   local counter=1
   local show_numbers=false
@@ -345,10 +326,29 @@ function _logpipe() {
 }
 alias logpipe='_logpipe'
 
+# =============================================================================
+# NPM & NODE ALIASES
+# =============================================================================
 alias ncu='npx npm-check-updates -i'
 
+# Улучшенная история команд
+export HISTSIZE=10000
+export HISTFILESIZE=20000
+export HISTCONTROL=ignoreboth:erasedups
+shopt -s histappend
 
+# Автодополнение для git
+if [ -f /usr/share/bash-completion/completions/git ]; then
+    source /usr/share/bash-completion/completions/git
+fi
+
+
+# Navigation tool
 eval "$(zoxide init bash)"
+
+# =============================================================================
+# CUSTOM UTILITIES
+# =============================================================================
 
 
 ### Extract files from failed log bat 0_build.txt | rg FAIL | rg -o -r '$0' '\b[a-zA-Z0-9_/.-]+\.[a-zA-Z]+\b' |sort | uniq  | tr '\n' ' '
