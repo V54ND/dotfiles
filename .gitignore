@@ -23,8 +23,7 @@
 
 !.bashrc
 
-!clear_hosts.sh
-!fill_hosts.sh
+
 !migrate_choco_to_scoop.sh
 
 !scoop.json

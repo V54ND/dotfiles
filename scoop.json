@@ -4,89 +4,21 @@
             "Name": "main",
             "Source": "https://github.com/ScoopInstaller/Main.git",
             "Updated": {
-                "value": "\/Date(1737750424000)\/",
+                "value": "\/Date(1756125091000)\/",
                 "DisplayHint": 2,
-                "DateTime": "Friday, January 24, 2025 10:27:04 PM"
+                "DateTime": "Monday, August 25, 2025 3:31:31 PM"
             },
-            "Manifests": 1356
+            "Manifests": 1403
         },
         {
             "Name": "extras",
             "Source": "https://github.com/ScoopInstaller/Extras",
             "Updated": {
-                "value": "\/Date(1737750613000)\/",
+                "value": "\/Date(1756125094000)\/",
                 "DisplayHint": 2,
-                "DateTime": "Friday, January 24, 2025 10:30:13 PM"
+                "DateTime": "Monday, August 25, 2025 3:31:34 PM"
             },
-            "Manifests": 2122
-        }
-    ],
-    "apps": [
-        {
-            "Info": "",
-            "Source": "main",
-            "Name": "eza",
-            "Version": "0.18.11",
-            "Updated": "\/Date(1714032272369)\/"
-        },
-        {
-            "Info": "",
-            "Source": "main",
-            "Name": "jid",
-            "Version": "0.7.6",
-            "Updated": "\/Date(1714689499219)\/"
-        },
-        {
-            "Info": "",
-            "Source": "main",
-            "Name": "jq",
-            "Version": "1.7.1",
-            "Updated": "\/Date(1714689490224)\/"
-        },
-        {
-            "Info": "",
-            "Source": "main",
-            "Name": "neovim",
-            "Version": "0.9.5",
-            "Updated": "\/Date(1713711252855)\/"
-        },
-        {
-            "Info": "",
-            "Source": "main",
-            "Name": "winfetch",
-            "Version": "2.5.1",
-            "Updated": "\/Date(1714689165991)\/"
-        },
-        {
-            "Info": "",
-            "Source": "main",
-            "Name": "yt-dlp",
-            "Version": "2025.01.15",
-            "Updated": "\/Date(1737751441912)\/"
-        }
-    ]
-}
-{
-    "buckets": [
-        {
-            "Name": "main",
-            "Source": "https://github.com/ScoopInstaller/Main.git",
-            "Updated": {
-                "value": "\/Date(1742574620000)\/",
-                "DisplayHint": 2,
-                "DateTime": "Friday, March 21, 2025 6:30:20 PM"
-            },
-            "Manifests": 1387
-        },
-        {
-            "Name": "extras",
-            "Source": "https://github.com/ScoopInstaller/Extras",
-            "Updated": {
-                "value": "\/Date(1742574563000)\/",
-                "DisplayHint": 2,
-                "DateTime": "Friday, March 21, 2025 6:29:23 PM"
-            },
-            "Manifests": 2144
+            "Manifests": 2180
         }
     ],
     "apps": [
@@ -100,23 +32,51 @@
         {
             "Info": "",
             "Source": "main",
-            "Name": "dark",
-            "Version": "3.14",
-            "Updated": "\/Date(1722366553974)\/"
+            "Name": "aichat",
+            "Version": "0.29.0",
+            "Updated": "\/Date(1746540675798)\/"
         },
         {
             "Info": "",
             "Source": "extras",
+            "Name": "crystaldiskinfo",
+            "Version": "9.7.0",
+            "Updated": "\/Date(1751483984730)\/"
+        },
+        {
+            "Info": "",
+            "Source": "main",
+            "Name": "curlie",
+            "Version": "1.8.2",
+            "Updated": "\/Date(1756130478757)\/"
+        },
+        {
+            "Info": "",
+            "Source": "main",
+            "Name": "dark",
+            "Version": "3.14.1",
+            "Updated": "\/Date(1751483988109)\/"
+        },
+        {
+            "Info": "Install failed",
+            "Source": null,
             "Name": "discord",
-            "Version": "1.0.9156-20",
-            "Updated": "\/Date(1742576334229)\/"
+            "Version": null,
+            "Updated": "\/Date(1755708761900)\/"
         },
         {
             "Info": "",
             "Source": "main",
             "Name": "eza",
-            "Version": "0.18.11",
-            "Updated": "\/Date(1714032272369)\/"
+            "Version": "0.21.6",
+            "Updated": "\/Date(1751484002502)\/"
+        },
+        {
+            "Info": "",
+            "Source": "main",
+            "Name": "gh",
+            "Version": "2.74.2",
+            "Updated": "\/Date(1751484011592)\/"
         },
         {
             "Info": "",
@@ -129,29 +89,57 @@
             "Info": "",
             "Source": "main",
             "Name": "jq",
-            "Version": "1.7.1",
-            "Updated": "\/Date(1714689490224)\/"
+            "Version": "1.8.1",
+            "Updated": "\/Date(1751484014718)\/"
+        },
+        {
+            "Info": "",
+            "Source": "extras",
+            "Name": "localsend",
+            "Version": "1.17.0",
+            "Updated": "\/Date(1750681066517)\/"
         },
         {
             "Info": "",
             "Source": "main",
             "Name": "neovim",
-            "Version": "0.9.5",
-            "Updated": "\/Date(1713711252855)\/"
+            "Version": "0.11.2",
+            "Updated": "\/Date(1751484024877)\/"
+        },
+        {
+            "Info": "",
+            "Source": "extras",
+            "Name": "nilesoft-shell",
+            "Version": "1.9.18",
+            "Updated": "\/Date(1755713094687)\/"
         },
         {
             "Info": "",
             "Source": "main",
             "Name": "python",
-            "Version": "3.12.4",
-            "Updated": "\/Date(1722366602574)\/"
+            "Version": "3.13.5",
+            "Updated": "\/Date(1751484100513)\/"
         },
         {
-            "Info": "Install failed",
+            "Info": "",
             "Source": "extras",
-            "Name": "windhawk",
-            "Version": "1.5.1",
-            "Updated": "\/Date(1735156205519)\/"
+            "Name": "rufus",
+            "Version": "4.9",
+            "Updated": "\/Date(1752749424036)\/"
+        },
+        {
+            "Info": "",
+            "Source": "extras",
+            "Name": "space",
+            "Version": "1.1.0",
+            "Updated": "\/Date(1749804140888)\/"
+        },
+        {
+            "Info": "",
+            "Source": "extras",
+            "Name": "translucenttb",
+            "Version": "2025.1",
+            "Updated": "\/Date(1755712728090)\/"
         },
         {
             "Info": "",
@@ -178,8 +166,8 @@
             "Info": "",
             "Source": "main",
             "Name": "yt-dlp",
-            "Version": "2025.01.15",
-            "Updated": "\/Date(1737751441912)\/"
+            "Version": "2025.06.30",
+            "Updated": "\/Date(1751484109111)\/"
         }
     ]
 }
