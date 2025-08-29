@@ -350,5 +350,4 @@ eval "$(zoxide init bash)"
 # CUSTOM UTILITIES
 # =============================================================================
 
-
-### Extract files from failed log bat 0_build.txt | rg FAIL | rg -o -r '$0' '\b[a-zA-Z0-9_/.-]+\.[a-zA-Z]+\b' |sort | uniq  | tr '\n' ' '
+export OPENAI_API_KEY="$OPENAI_API_KEY"
