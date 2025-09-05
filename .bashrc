@@ -350,4 +350,18 @@ eval "$(zoxide init bash)"
 # CUSTOM UTILITIES
 # =============================================================================
 
-export OPENAI_API_KEY="$OPENAI_API_KEY"
+export OPENAI_API_KEY="$OPENAI_API_KEY" # For windows requires setx OPENAI_API_KEY "your_key"
+
+function extract-failed() {
+    if [ -z "$1" ]; then
+        echo "Usage: extract-failed <filename>"
+        return 1
+    fi
+    
+    if [ ! -f "$1" ]; then
+        echo "Error: File '$1' not found"
+        return 1
+    fi
+    
+    bat "$1" | rg "FAIL" | rg -o "[^\s]+\.(tsx|ts)?\$" | sort | uniq
+}
