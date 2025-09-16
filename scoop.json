@@ -4,21 +4,21 @@
             "Name": "main",
             "Source": "https://github.com/ScoopInstaller/Main.git",
             "Updated": {
-                "value": "\/Date(1756125091000)\/",
+                "value": "\/Date(1757838567000)\/",
                 "DisplayHint": 2,
-                "DateTime": "Monday, August 25, 2025 3:31:31 PM"
+                "DateTime": "Sunday, September 14, 2025 11:29:27 AM"
             },
-            "Manifests": 1403
+            "Manifests": 1402
         },
         {
             "Name": "extras",
             "Source": "https://github.com/ScoopInstaller/Extras",
             "Updated": {
-                "value": "\/Date(1756125094000)\/",
+                "value": "\/Date(1757838561000)\/",
                 "DisplayHint": 2,
-                "DateTime": "Monday, August 25, 2025 3:31:34 PM"
+                "DateTime": "Sunday, September 14, 2025 11:29:21 AM"
             },
-            "Manifests": 2180
+            "Manifests": 2182
         }
     ],
     "apps": [
@@ -31,10 +31,10 @@
         },
         {
             "Info": "",
-            "Source": "main",
-            "Name": "aichat",
-            "Version": "0.29.0",
-            "Updated": "\/Date(1746540675798)\/"
+            "Source": "extras",
+            "Name": "bulk-crap-uninstaller",
+            "Version": "5.9.0",
+            "Updated": "\/Date(1756502889653)\/"
         },
         {
             "Info": "",
@@ -56,13 +56,6 @@
             "Name": "dark",
             "Version": "3.14.1",
             "Updated": "\/Date(1751483988109)\/"
-        },
-        {
-            "Info": "Install failed",
-            "Source": null,
-            "Name": "discord",
-            "Version": null,
-            "Updated": "\/Date(1755708761900)\/"
         },
         {
             "Info": "",
@@ -91,6 +84,13 @@
             "Name": "jq",
             "Version": "1.8.1",
             "Updated": "\/Date(1751484014718)\/"
+        },
+        {
+            "Info": "",
+            "Source": "main",
+            "Name": "less",
+            "Version": "679",
+            "Updated": "\/Date(1756759197812)\/"
         },
         {
             "Info": "",
@@ -129,17 +129,10 @@
         },
         {
             "Info": "",
-            "Source": "extras",
-            "Name": "space",
-            "Version": "1.1.0",
-            "Updated": "\/Date(1749804140888)\/"
-        },
-        {
-            "Info": "",
-            "Source": "extras",
-            "Name": "translucenttb",
-            "Version": "2025.1",
-            "Updated": "\/Date(1755712728090)\/"
+            "Source": "main",
+            "Name": "tailspin",
+            "Version": "5.5.0",
+            "Updated": "\/Date(1756759202148)\/"
         },
         {
             "Info": "",
@@ -147,13 +140,6 @@
             "Name": "winfetch",
             "Version": "2.5.1",
             "Updated": "\/Date(1714689165991)\/"
-        },
-        {
-            "Info": "",
-            "Source": "extras",
-            "Name": "xplorer",
-            "Version": "0.3.1",
-            "Updated": "\/Date(1733672512451)\/"
         },
         {
             "Info": "",

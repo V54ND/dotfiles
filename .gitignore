@@ -27,3 +27,5 @@
 !migrate_choco_to_scoop.sh
 
 !scoop.json
+!choco_list.txt
+
