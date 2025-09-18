@@ -303,3 +303,284 @@
         }
     ]
 }
+{
+    "buckets": [
+        {
+            "Name": "main",
+            "Source": "https://github.com/ScoopInstaller/Main",
+            "Updated": {
+                "value": "\/Date(1758220772000)\/",
+                "DisplayHint": 2,
+                "DateTime": "Thursday, September 18, 2025 9:39:32 PM"
+            },
+            "Manifests": 1402
+        },
+        {
+            "Name": "extras",
+            "Source": "https://github.com/ScoopInstaller/Extras",
+            "Updated": {
+                "value": "\/Date(1758212957000)\/",
+                "DisplayHint": 2,
+                "DateTime": "Thursday, September 18, 2025 7:29:17 PM"
+            },
+            "Manifests": 2183
+        },
+        {
+            "Name": "nerd-fonts",
+            "Source": "https://github.com/matthewjberger/scoop-nerd-fonts",
+            "Updated": {
+                "value": "\/Date(1757767280000)\/",
+                "DisplayHint": 2,
+                "DateTime": "Saturday, September 13, 2025 3:41:20 PM"
+            },
+            "Manifests": 367
+        }
+    ],
+    "apps": [
+        {
+            "Info": "",
+            "Source": "main",
+            "Name": "7zip",
+            "Version": "25.01",
+            "Updated": "\/Date(1758114301848)\/"
+        },
+        {
+            "Info": "",
+            "Source": "main",
+            "Name": "bat",
+            "Version": "0.25.0",
+            "Updated": "\/Date(1758112918761)\/"
+        },
+        {
+            "Info": "",
+            "Source": "extras",
+            "Name": "bitwarden",
+            "Version": "2025.8.2",
+            "Updated": "\/Date(1758114587993)\/"
+        },
+        {
+            "Info": "",
+            "Source": "extras",
+            "Name": "bulk-crap-uninstaller",
+            "Version": "5.9.0",
+            "Updated": "\/Date(1758113626416)\/"
+        },
+        {
+            "Info": "",
+            "Source": "extras",
+            "Name": "chromium",
+            "Version": "140.0.7339.128-r1496484",
+            "Updated": "\/Date(1758114315382)\/"
+        },
+        {
+            "Info": "",
+            "Source": "extras",
+            "Name": "coretemp",
+            "Version": "1.18.1",
+            "Updated": "\/Date(1758114710928)\/"
+        },
+        {
+            "Info": "",
+            "Source": "extras",
+            "Name": "crystaldiskinfo",
+            "Version": "9.7.2",
+            "Updated": "\/Date(1758113717100)\/"
+        },
+        {
+            "Info": "",
+            "Source": "main",
+            "Name": "curlie",
+            "Version": "1.8.2",
+            "Updated": "\/Date(1758113717733)\/"
+        },
+        {
+            "Info": "",
+            "Source": "main",
+            "Name": "eza",
+            "Version": "0.23.3",
+            "Updated": "\/Date(1758113719209)\/"
+        },
+        {
+            "Info": "",
+            "Source": "main",
+            "Name": "fd",
+            "Version": "10.3.0",
+            "Updated": "\/Date(1758113526474)\/"
+        },
+        {
+            "Info": "",
+            "Source": "main",
+            "Name": "ffmpeg",
+            "Version": "8.0",
+            "Updated": "\/Date(1758114375735)\/"
+        },
+        {
+            "Info": "",
+            "Source": "main",
+            "Name": "fzf",
+            "Version": "0.65.2",
+            "Updated": "\/Date(1758113527078)\/"
+        },
+        {
+            "Info": "",
+            "Source": "main",
+            "Name": "gh",
+            "Version": "2.79.0",
+            "Updated": "\/Date(1758113720050)\/"
+        },
+        {
+            "Info": "",
+            "Source": "main",
+            "Name": "git",
+            "Version": "2.51.0",
+            "Updated": "\/Date(1758114473089)\/"
+        },
+        {
+            "Info": "",
+            "Source": "main",
+            "Name": "imagemagick",
+            "Version": "7.1.2-3",
+            "Updated": "\/Date(1758114462221)\/"
+        },
+        {
+            "Info": "",
+            "Source": "nerd-fonts",
+            "Name": "Iosevka-NF",
+            "Version": "3.4.0",
+            "Updated": "\/Date(1758114812758)\/"
+        },
+        {
+            "Info": "",
+            "Source": "main",
+            "Name": "jid",
+            "Version": "0.7.6",
+            "Updated": "\/Date(1758113722016)\/"
+        },
+        {
+            "Info": "",
+            "Source": "main",
+            "Name": "jq",
+            "Version": "1.8.1",
+            "Updated": "\/Date(1758113722350)\/"
+        },
+        {
+            "Info": "",
+            "Source": "extras",
+            "Name": "localsend",
+            "Version": "1.17.0",
+            "Updated": "\/Date(1758113723982)\/"
+        },
+        {
+            "Info": "",
+            "Source": "main",
+            "Name": "neovim",
+            "Version": "0.11.4",
+            "Updated": "\/Date(1758113728500)\/"
+        },
+        {
+            "Info": "",
+            "Source": "extras",
+            "Name": "nilesoft-shell",
+            "Version": "1.9.18",
+            "Updated": "\/Date(1758113732338)\/"
+        },
+        {
+            "Info": "",
+            "Source": "extras",
+            "Name": "notion",
+            "Version": "4.20.0",
+            "Updated": "\/Date(1758114307398)\/"
+        },
+        {
+            "Info": "",
+            "Source": "main",
+            "Name": "nvm",
+            "Version": "1.2.2",
+            "Updated": "\/Date(1758114105723)\/"
+        },
+        {
+            "Info": "",
+            "Source": "extras",
+            "Name": "picotorrent",
+            "Version": "0.25.0",
+            "Updated": "\/Date(1758114713077)\/"
+        },
+        {
+            "Info": "",
+            "Source": "extras",
+            "Name": "powertoys",
+            "Version": "0.94.1",
+            "Updated": "\/Date(1758225760997)\/"
+        },
+        {
+            "Info": "",
+            "Source": "main",
+            "Name": "python",
+            "Version": "3.13.7",
+            "Updated": "\/Date(1758113756380)\/"
+        },
+        {
+            "Info": "",
+            "Source": "main",
+            "Name": "ripgrep",
+            "Version": "14.1.1",
+            "Updated": "\/Date(1758113527682)\/"
+        },
+        {
+            "Info": "",
+            "Source": "extras",
+            "Name": "rufus",
+            "Version": "4.9",
+            "Updated": "\/Date(1758113756930)\/"
+        },
+        {
+            "Info": "",
+            "Source": "main",
+            "Name": "tailspin",
+            "Version": "5.5.0",
+            "Updated": "\/Date(1758113757546)\/"
+        },
+        {
+            "Info": "",
+            "Source": "extras",
+            "Name": "vlc",
+            "Version": "3.0.21",
+            "Updated": "\/Date(1758114717223)\/"
+        },
+        {
+            "Info": "",
+            "Source": "extras",
+            "Name": "wezterm",
+            "Version": "20240203-110809-5046fc22",
+            "Updated": "\/Date(1758114104852)\/"
+        },
+        {
+            "Info": "",
+            "Source": "main",
+            "Name": "winfetch",
+            "Version": "2.5.1",
+            "Updated": "\/Date(1758113757872)\/"
+        },
+        {
+            "Info": "",
+            "Source": "main",
+            "Name": "youtube-dl",
+            "Version": "2021.12.17",
+            "Updated": "\/Date(1758113758681)\/"
+        },
+        {
+            "Info": "",
+            "Source": "main",
+            "Name": "yt-dlp",
+            "Version": "2025.09.05",
+            "Updated": "\/Date(1758113759254)\/"
+        },
+        {
+            "Info": "",
+            "Source": "main",
+            "Name": "zoxide",
+            "Version": "0.9.8",
+            "Updated": "\/Date(1758113527982)\/"
+        }
+    ]
+}
