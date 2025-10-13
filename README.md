@@ -54,3 +54,9 @@ brew install bat fd fzf ripgrep zoxide ffmpeg imagemagick nvm neovim neofetch gn
 
 ```
 
+## Git symlink in windows
+
+```
+New-Item -ItemType SymbolicLink -Path "C:\Program Files\Git" -Target "$env:USERPROFILE\scoop\apps\git\current"
+```
+
