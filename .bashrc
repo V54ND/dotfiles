@@ -365,3 +365,4 @@ function extract-failed() {
     
     bat "$1" | rg "FAIL" | rg -o "[^\s]+\.(tsx|ts)?\$" | sort | uniq
 }
+export AWS_SHARED_CREDENTIALS_FILE=~/.aws/credentials

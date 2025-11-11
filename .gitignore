@@ -29,3 +29,8 @@
 !scoop.json
 !choco_list.txt
 
+!.continue/
+!.continue/config.yaml
+!.continue/.env.example
+!.continue/agents/
+!.continue/agents/*

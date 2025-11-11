@@ -1,0 +1,6 @@
+# yaml-language-server: $schema=../.vscode/extensions/continue.continue-1.2.10-win32-x64/config-yaml-schema.json
+
+name: Local Config
+version: 1.0.0
+schema: v1
+models: []

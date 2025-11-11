@@ -1,0 +1,120 @@
+# yaml-language-server: $schema=../../.vscode/extensions/continue.continue-1.2.10-win32-x64/config-yaml-schema.json
+
+name: Work Config
+version: 1.0.0
+schema: v1
+
+models:
+  - name: OpenAI/Claude-3.5-Sonnet
+    provider: openai
+    model: claude-3-5-sonnet-20241022
+    apiBase: ${{ secrets.SXM_API_BASE }}
+    apiKey: ${{ secrets.SXM_LITELLM_KEY }}
+    roles:
+      - chat
+      - edit
+      - apply
+      - autocomplete
+    env:
+      NODE_EXTRA_CA_CERTS: "C:\\Users\\%USERNAME%\\.sxm\\certs\\siriusxm-cloud.crt"
+      NODE_TLS_REJECT_UNAUTHORIZED: "1"
+
+  - name: OpenAI/GPT-4o
+    provider: openai
+    model: gpt-4o
+    apiBase: ${{ secrets.SXM_API_BASE }}
+    apiKey: ${{ secrets.SXM_LITELLM_KEY }}
+    roles:
+      - chat
+      - edit
+      - apply
+      - autocomplete
+    env:
+      NODE_EXTRA_CA_CERTS: "C:\\Users\\%USERNAME%\\.sxm\\certs\\siriusxm-cloud.crt"
+      NODE_TLS_REJECT_UNAUTHORIZED: "1"
+
+  - name: OpenAI/O1-Mini
+    provider: openai
+    model: o1-mini
+    apiBase: ${{ secrets.SXM_API_BASE }}
+    apiKey: ${{ secrets.SXM_LITELLM_KEY }}
+    roles:
+      - chat
+      - edit
+      - apply
+      - autocomplete
+    env:
+      NODE_EXTRA_CA_CERTS: "C:\\Users\\%USERNAME%\\.sxm\\certs\\siriusxm-cloud.crt"
+      NODE_TLS_REJECT_UNAUTHORIZED: "1"
+
+  - name: OpenAI/Claude-3.5-Haiku
+    provider: openai
+    model: claude-3-5-haiku-20241022
+    apiBase: ${{ secrets.SXM_API_BASE }}
+    apiKey: ${{ secrets.SXM_LITELLM_KEY }}
+    roles:
+      - chat
+      - edit
+      - apply
+      - autocomplete
+    env:
+      NODE_EXTRA_CA_CERTS: "C:\\Users\\%USERNAME%\\.sxm\\certs\\siriusxm-cloud.crt"
+      NODE_TLS_REJECT_UNAUTHORIZED: "1"
+
+  - name: OpenAI/GPT-4o-Mini
+    provider: openai
+    model: gpt-4o-mini
+    apiBase: ${{ secrets.SXM_API_BASE }}
+    apiKey: ${{ secrets.SXM_LITELLM_KEY }}
+    roles:
+      - chat
+      - edit
+      - apply
+      - autocomplete
+    env:
+      NODE_EXTRA_CA_CERTS: "C:\\Users\\%USERNAME%\\.sxm\\certs\\siriusxm-cloud.crt"
+      NODE_TLS_REJECT_UNAUTHORIZED: "1"
+
+  - name: OpenAI/Codex-Mini-Latest
+    provider: openai
+    model: codex-mini-latest
+    apiBase: ${{ secrets.SXM_API_BASE }}
+    apiKey: ${{ secrets.SXM_LITELLM_KEY }}
+    roles:
+      - chat
+      - edit
+      - apply
+      - autocomplete
+    env:
+      NODE_EXTRA_CA_CERTS: "C:\\Users\\%USERNAME%\\.sxm\\certs\\siriusxm-cloud.crt"
+      NODE_TLS_REJECT_UNAUTHORIZED: "1"
+
+  - name: OpenAI/GPT-5-Codex
+    provider: openai
+    model: gpt-5-codex
+    apiBase: ${{ secrets.SXM_API_BASE }}
+    apiKey: ${{ secrets.SXM_LITELLM_KEY }}
+    roles:
+      - chat
+      - edit
+      - apply
+      - autocomplete
+    env:
+      NODE_EXTRA_CA_CERTS: "C:\\Users\\%USERNAME%\\.sxm\\certs\\siriusxm-cloud.crt"
+      NODE_TLS_REJECT_UNAUTHORIZED: "1"
+
+
+mcpServers:
+  - name: awsdocs
+    command: uvx
+    args:
+      - awslabs.aws-documentation-mcp-server@latest
+    env:
+      FASTMCP_LOG_LEVEL: ERROR
+      AWS_DOCUMENTATION_PARTITION: aws
+  - name: awsdiags
+    command: uvx
+    args:
+      - awslabs.aws-diagram-mcp-server
+    env:
+      FASTMCP_LOG_LEVEL: ERROR
