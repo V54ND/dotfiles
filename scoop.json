@@ -4,29 +4,29 @@
             "Name": "main",
             "Source": "https://github.com/ScoopInstaller/Main",
             "Updated": {
-                "value": "\/Date(1758220772000)\/",
+                "value": "\/Date(1764275327000)\/",
                 "DisplayHint": 2,
-                "DateTime": "Thursday, September 18, 2025 9:39:32 PM"
+                "DateTime": "Thursday, November 27, 2025 10:28:47 PM"
             },
-            "Manifests": 1402
+            "Manifests": 1413
         },
         {
             "Name": "extras",
             "Source": "https://github.com/ScoopInstaller/Extras",
             "Updated": {
-                "value": "\/Date(1758212957000)\/",
+                "value": "\/Date(1764275316000)\/",
                 "DisplayHint": 2,
-                "DateTime": "Thursday, September 18, 2025 7:29:17 PM"
+                "DateTime": "Thursday, November 27, 2025 10:28:36 PM"
             },
-            "Manifests": 2183
+            "Manifests": 2216
         },
         {
             "Name": "nerd-fonts",
             "Source": "https://github.com/matthewjberger/scoop-nerd-fonts",
             "Updated": {
-                "value": "\/Date(1757767280000)\/",
+                "value": "\/Date(1764239336000)\/",
                 "DisplayHint": 2,
-                "DateTime": "Saturday, September 13, 2025 3:41:20 PM"
+                "DateTime": "Thursday, November 27, 2025 12:28:56 PM"
             },
             "Manifests": 367
         }
@@ -50,8 +50,8 @@
             "Info": "",
             "Source": "extras",
             "Name": "bitwarden",
-            "Version": "2025.8.2",
-            "Updated": "\/Date(1758114587993)\/"
+            "Version": "2025.9.0",
+            "Updated": "\/Date(1758612921162)\/"
         },
         {
             "Info": "",
@@ -64,8 +64,8 @@
             "Info": "",
             "Source": "extras",
             "Name": "chromium",
-            "Version": "140.0.7339.128-r1496484",
-            "Updated": "\/Date(1758114315382)\/"
+            "Version": "140.0.7339.186-r1496484",
+            "Updated": "\/Date(1758612962076)\/"
         },
         {
             "Info": "",
@@ -115,6 +115,13 @@
             "Name": "fzf",
             "Version": "0.65.2",
             "Updated": "\/Date(1758113527078)\/"
+        },
+        {
+            "Info": "",
+            "Source": "main",
+            "Name": "gcc",
+            "Version": "13.2.0",
+            "Updated": "\/Date(1764276057851)\/"
         },
         {
             "Info": "",
@@ -227,6 +234,13 @@
             "Name": "rufus",
             "Version": "4.9",
             "Updated": "\/Date(1758113756930)\/"
+        },
+        {
+            "Info": "",
+            "Source": "nerd-fonts",
+            "Name": "SarasaGothic",
+            "Version": "1.0.35",
+            "Updated": "\/Date(1764276915553)\/"
         },
         {
             "Info": "",
