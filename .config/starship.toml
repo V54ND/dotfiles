@@ -1,0 +1,91 @@
+
+add_newline = false
+
+format = """
+$directory\
+$git_branch\
+$git_status\
+$nodejs\
+$python\
+$rust\
+$docker_context\
+$kubernetes\
+$cmd_duration\
+$line_break\
+$jobs\
+$status\
+$character
+"""
+
+# -------------------------
+# Directory
+# -------------------------
+[directory]
+style = "bold cyan"
+truncate_to_repo = false
+truncation_length = 3
+
+# -------------------------
+# Git branch
+# -------------------------
+[git_branch]
+symbol = " "
+style = "bold purple"
+
+# -------------------------
+# Git status
+# -------------------------
+[git_status]
+style = "red"
+format = "[$all_status$ahead_behind]($style)"
+
+# -------------------------
+# Node
+# -------------------------
+[nodejs]
+symbol = "⬢ "
+style = "bold green"
+
+# -------------------------
+# Python
+# -------------------------
+[python]
+symbol = "🐍 "
+style = "yellow"
+
+# -------------------------
+# Docker
+# -------------------------
+[docker_context]
+symbol = "🐳 "
+style = "blue"
+
+# -------------------------
+# K8s
+# -------------------------
+[kubernetes]
+symbol = "☸ "
+style = "blue"
+
+# -------------------------
+# Command duration
+# -------------------------
+[cmd_duration]
+min_time = 1000
+format = "⏱ [$duration]($style) "
+
+# -------------------------
+# Exit status
+# -------------------------
+[status]
+style = "bold red"
+symbol = "❌ "
+format = "[$symbol$status]($style) "
+disabled = false
+
+# -------------------------
+# Prompt symbol
+# -------------------------
+[character]
+success_symbol = "[❯](bold green)"
+error_symbol = "[❯](bold red)"

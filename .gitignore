@@ -14,6 +14,12 @@
 !.config/nvim/**/*
 !.config/nvim/**/**/*
 
+!.config/fish/
+!.config/fish/*
+!.config/fish/**/*
+!.config/fish/**/**/*
+
+!.config/starship.toml
 
 !.config/wezterm/
 !.config/wezterm/*

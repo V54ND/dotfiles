@@ -1,5 +1,6 @@
 local wezterm = require("wezterm")
 local gitbash = { "C:\\Program Files\\Git\\bin\\bash.exe", "-li" }
+local zsh = { "/bin/zsh", "-l" }
 
 local mux = wezterm.mux
 
@@ -35,10 +36,30 @@ config.launch_menu = {
 		label = "Git Bash",
 		args = gitbash,
 	},
+	{
+		label = "Bash (macOS)",
+		args = { "/bin/bash", "-l" },
+    },
+	{
+		label = "Zsh (macOS)",
+		args = zsh,
+	},
+	{
+		label = "Fish (macOS)",
+		args = { "/usr/local/bin/fish", "-l" },
+	},
 }
 
 -- 🐚 По умолчанию — Git Bash
-config.default_prog = gitbash
+-- Определяем ОС
+local target = wezterm.target_triple
+
+if target:find("windows") then
+	config.default_prog = gitbash
+elseif target:find("apple") or target:find("darwin") then
+	config.default_prog = { "/bin/zsh", "-l" }
+end
+
 
 -- 🔤 Шрифт
 config.font = wezterm.font("Iosevka Nerd Font")
@@ -52,10 +73,10 @@ config.term = "xterm-256color"
 
 -- ⌨️ Горячие клавиши
 config.keys = {
-	{ key = "d", mods = "CTRL|ALT", action = wezterm.action { SplitHorizontal = { domain = "CurrentPaneDomain" } } },
-	{ key = "D", mods = "CTRL|ALT", action = wezterm.action { SplitVertical = { domain = "CurrentPaneDomain" } } },
-	{ key = "t", mods = "CTRL|ALT", action = wezterm.action { SpawnTab = "CurrentPaneDomain" } },
-	{ key = "w", mods = "CTRL|ALT", action = wezterm.action { CloseCurrentPane = { confirm = true } } },
+	{ key = "d", mods = "CTRL|ALT",   action = wezterm.action { SplitHorizontal = { domain = "CurrentPaneDomain" } } },
+	{ key = "D", mods = "CTRL|ALT",   action = wezterm.action { SplitVertical = { domain = "CurrentPaneDomain" } } },
+	{ key = "t", mods = "CTRL|ALT",   action = wezterm.action { SpawnTab = "CurrentPaneDomain" } },
+	{ key = "w", mods = "CTRL|ALT",   action = wezterm.action { CloseCurrentPane = { confirm = true } } },
 	{ key = "c", mods = "CTRL|SHIFT", action = wezterm.action { CopyTo = "Clipboard" } },
 	{ key = "v", mods = "CTRL|SHIFT", action = wezterm.action { PasteFrom = "Clipboard" } },
 }
