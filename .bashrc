@@ -12,20 +12,21 @@ alias lla='eza --color=always --color-scale=all --color-scale-mode=gradient --ic
 
 alias gll="git fetch && git pull"
 alias gf="git fetch"
-alias gc="git checkout"
-alias gp="git push -u origin \$(git branch --show-current)"
+alias gc="git commit -v"
+alias gp="git push"
 alias gs="git status"
 alias ga="git add"
 alias gaa="git add --all"
-alias gcm="git commit -m"
-alias gca="git commit --amend"
+alias gcm="git checkout \$(git_main_branch)"
+alias gca="git commit -v -a"
 alias gd="git diff"
 alias gds="git diff --staged"
-alias gl="git log --oneline -10"
+alias gl="git pull"
 alias gb="git branch"
 alias gbd="git branch -d"
 alias gco="git checkout"
 alias gcb="git checkout -b"
+alias gst="git status"
 
 # =============================================================================
 # VIDEO COMPRESSION FUNCTION
