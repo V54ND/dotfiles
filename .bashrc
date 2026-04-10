@@ -10,14 +10,80 @@ alias lla='eza --color=always --color-scale=all --color-scale-mode=gradient --ic
 # GIT ALIASES
 # =============================================================================
 
-alias gll="git fetch && git pull"
+git_main_branch() {
+  git rev-parse --git-dir >/dev/null 2>&1 || return 1
+  local ref
+  for ref in main trunk master; do
+    if git show-ref -q --verify "refs/heads/$ref"; then
+      printf '%s\n' "$ref"
+      return 0
+    fi
+  done
+  return 1
+}
+
+git_develop_branch() {
+  git rev-parse --git-dir >/dev/null 2>&1 || return 1
+  local ref
+  for ref in develop dev devel development; do
+    if git show-ref -q --verify "refs/heads/$ref"; then
+      printf '%s\n' "$ref"
+      return 0
+    fi
+  done
+  return 1
+}
+
+gll() {
+  git rev-parse --git-dir >/dev/null 2>&1 || {
+    echo "Not a git repository" >&2
+    return 1
+  }
+
+  git fetch --all --prune || return 1
+  git pull || return 1
+
+  local dev_branch
+  dev_branch="$(git_develop_branch)" || return 0
+
+  if git ls-remote --exit-code --heads origin "$dev_branch" >/dev/null 2>&1; then
+    git fetch origin "$dev_branch:$dev_branch"
+  fi
+}
+
+gcm() {
+  local main_branch
+  main_branch="$(git_main_branch)" || {
+    echo "Could not determine main branch" >&2
+    return 1
+  }
+  git switch "$main_branch"
+}
+
+gswm() {
+  local main_branch
+  main_branch="$(git_main_branch)" || {
+    echo "Could not determine main branch" >&2
+    return 1
+  }
+  git switch "$main_branch"
+}
+
+gswd() {
+  local dev_branch
+  dev_branch="$(git_develop_branch)" || {
+    echo "Could not determine develop branch" >&2
+    return 1
+  }
+  git switch "$dev_branch"
+}
+
 alias gf="git fetch"
 alias gc="git commit -v"
 alias gp="git push"
 alias gs="git status"
 alias ga="git add"
 alias gaa="git add --all"
-alias gcm="git checkout \$(git_main_branch)"
 alias gca="git commit -v -a"
 alias gd="git diff"
 alias gds="git diff --staged"
@@ -27,6 +93,8 @@ alias gbd="git branch -d"
 alias gco="git checkout"
 alias gcb="git checkout -b"
 alias gst="git status"
+alias gsw="git switch"
+alias gswc="git switch -c"
 
 # =============================================================================
 # VIDEO COMPRESSION FUNCTION
