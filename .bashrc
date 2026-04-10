@@ -1,3 +1,6 @@
+# shellcheck shell=bash
+
+
 # =============================================================================
 # EZA ALIASES (modern ls replacement)
 # =============================================================================
@@ -35,10 +38,10 @@ git_develop_branch() {
 }
 
 gll() {
-  git rev-parse --git-dir >/dev/null 2>&1 || {
+  if ! git rev-parse --git-dir >/dev/null 2>&1; then
     echo "Not a git repository" >&2
     return 1
-  }
+  fi
 
   git fetch --all --prune || return 1
   git pull || return 1
@@ -53,10 +56,11 @@ gll() {
 
 gcm() {
   local main_branch
-  main_branch="$(git_main_branch)" || {
+  main_branch="$(git_main_branch)" || main_branch=""
+  if [ -z "$main_branch" ]; then
     echo "Could not determine main branch" >&2
     return 1
-  }
+  fi
   git switch "$main_branch"
 }
 
@@ -413,7 +417,7 @@ fi
 
 
 # Navigation tool
-eval "$(zoxide init bash)"
+command -v zoxide >/dev/null 2>&1 && eval "$(zoxide init bash)"
 
 # =============================================================================
 # CUSTOM UTILITIES
@@ -421,7 +425,7 @@ eval "$(zoxide init bash)"
 
 export OPENAI_API_KEY="$OPENAI_API_KEY" # For windows requires setx OPENAI_API_KEY "your_key"
 
-function extract-failed() {
+extract_failed() {
     if [ -z "$1" ]; then
         echo "Usage: extract-failed <filename>"
         return 1
@@ -434,4 +438,5 @@ function extract-failed() {
     
     bat "$1" | rg "FAIL" | rg -o "[^\s]+\.(tsx|ts)?\$" | sort | uniq
 }
+alias extract-failed='extract_failed'
 export AWS_SHARED_CREDENTIALS_FILE=~/.aws/credentials
