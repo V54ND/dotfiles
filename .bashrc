@@ -4,10 +4,17 @@
 # =============================================================================
 # EZA ALIASES (modern ls replacement)
 # =============================================================================
-alias l='eza --color=always --color-scale=all --color-scale-mode=gradient --icons=always --group-directories-first'
-alias ll='eza --color=always --color-scale=all --color-scale-mode=gradient --icons=always --group-directories-first -l --git -h'
-alias la='eza --color=always --color-scale=all --color-scale-mode=gradient --icons=always --group-directories-first -a'
-alias lla='eza --color=always --color-scale=all --color-scale-mode=gradient --icons=always --group-directories-first -a -l --git -h'
+if command -v eza >/dev/null 2>&1; then
+  alias l='eza --color=always --color-scale=all --color-scale-mode=gradient --icons=always --group-directories-first'
+  alias ll='eza --color=always --color-scale=all --color-scale-mode=gradient --icons=always --group-directories-first -l --git -h'
+  alias la='eza --color=always --color-scale=all --color-scale-mode=gradient --icons=always --group-directories-first -a'
+  alias lla='eza --color=always --color-scale=all --color-scale-mode=gradient --icons=always --group-directories-first -a -l --git -h'
+else
+  alias l='ls'
+  alias ll='ls -lh'
+  alias la='ls -A'
+  alias lla='ls -Alh'
+fi
 
 # =============================================================================
 # GIT ALIASES
@@ -67,6 +74,7 @@ gcm() {
   git switch "$main_branch"
 }
 
+unalias gswm 2>/dev/null
 gswm() {
   local main_branch
   main_branch="$(git_main_branch)" || {
@@ -76,6 +84,7 @@ gswm() {
   git switch "$main_branch"
 }
 
+unalias gswd 2>/dev/null
 gswd() {
   local dev_branch
   dev_branch="$(git_develop_branch)" || {
@@ -103,18 +112,124 @@ alias gst="git status"
 alias gsw="git switch"
 alias gswc="git switch -c"
 
+
 # =============================================================================
 # VIDEO COMPRESSION FUNCTION
 # =============================================================================
-function _compress() { 
+
+_compress_human_size() {
+  if command -v numfmt >/dev/null 2>&1; then
+    numfmt --to=iec "$1"
+  else
+    printf '%s bytes' "$1"
+  fi
+}
+
+_compress_read_stdin() {
+  local line
+  while IFS= read -r line || [ -n "$line" ]; do
+    line="${line%$'\r'}"
+    [ -n "$line" ] && printf '%s\n' "$line"
+  done
+}
+
+_compress_process_file() {
+  local file="$1"
+  local replace="$2"
+  local quality="$3"
+  local preset="$4"
+  local quiet="$5"
+  local extension original_size basename output_file compressed_size reduction
+  local ffmpeg_cmd
+
+  if [ ! -f "$file" ]; then
+    echo "Warning: File '$file' does not exist, skipping..." >&2
+    return 1
+  fi
+
+  extension="${file##*.}"
+  case "${extension,,}" in
+    mp4|avi|mov|mkv|wmv|flv|webm|m4v) ;;
+    *)
+      echo "Warning: '$file' is not a supported video format, skipping..." >&2
+      return 1
+      ;;
+  esac
+
+  basename="${file%.*}"
+  output_file="${basename}-compressed.${extension}"
+  if [ -f "$output_file" ] && [ "$replace" = false ]; then
+    echo "Warning: '$output_file' already exists, skipping..." >&2
+    return 1
+  fi
+
+  original_size=$(stat -f%z "$file" 2>/dev/null || stat -c%s "$file" 2>/dev/null || echo "unknown")
+  ffmpeg_cmd=(ffmpeg -i "$file" -vcodec libx264 -crf "$quality" -preset "$preset")
+  if [ "$quiet" = true ]; then
+    ffmpeg_cmd+=(-loglevel error)
+  fi
+  ffmpeg_cmd+=("$output_file")
+
+  if [ "$replace" = true ]; then
+    echo "Compressing and replacing: $file (quality: $quality, preset: $preset)"
+  else
+    echo "Compressing: $file -> $output_file (quality: $quality, preset: $preset)"
+  fi
+
+  if ! "${ffmpeg_cmd[@]}"; then
+    echo "Compression failed for: $file" >&2
+    return 1
+  fi
+
+  if [ "$original_size" != "unknown" ] && [ -f "$output_file" ]; then
+    compressed_size=$(stat -f%z "$output_file" 2>/dev/null || stat -c%s "$output_file" 2>/dev/null || echo "unknown")
+    if [ "$compressed_size" != "unknown" ] && [ "$original_size" -gt 0 ]; then
+      reduction=$(( (original_size - compressed_size) * 100 / original_size ))
+      echo "Compression completed: ${reduction}% size reduction ($(_compress_human_size "$original_size") -> $(_compress_human_size "$compressed_size"))"
+    fi
+  fi
+
+  if [ "$replace" = true ]; then
+    mv -- "$output_file" "$file"
+    echo "Original file replaced"
+  fi
+}
+
+_compress_run_queue() {
+  local replace="$1"
+  local quality="$2"
+  local preset="$3"
+  local quiet="$4"
+  local parallel_jobs="$5"
+  shift 5
+
+  local file
+  if [ "$parallel_jobs" -le 1 ] || [ "$#" -le 1 ]; then
+    for file in "$@"; do
+      _compress_process_file "$file" "$replace" "$quality" "$preset" "$quiet"
+    done
+    return
+  fi
+
+  echo "Processing $# files with $parallel_jobs parallel jobs..."
+  for file in "$@"; do
+    while [ "$(jobs -pr | wc -l)" -ge "$parallel_jobs" ]; do
+      sleep 0.1
+    done
+    _compress_process_file "$file" "$replace" "$quality" "$preset" "$quiet" &
+  done
+  wait
+}
+
+function _compress() {
   local replace=false
   local quality=23
   local preset="medium"
   local quiet=false
   local parallel_jobs=1
-  local video_formats="mp4|avi|mov|mkv|wmv|flv|webm|m4v"
-  
-  # Обработка опций
+  local file
+  local files_array=()
+
   while [[ $1 == -* ]]; do
     case $1 in
       -r|--replace)
@@ -160,10 +275,10 @@ function _compress() {
         echo "  -h, --help             Show this help"
         echo ""
         echo "Examples:"
-        echo "  compress video.mp4                    # Basic compression"
-        echo "  compress -r -q 20 *.mp4              # Replace with higher quality"
-        echo "  ls *.avi | compress -p fast           # Fast preset via pipe"
-        echo "  find . -name '*.mov' | compress -j 4  # Parallel processing"
+        echo "  compress video.mp4"
+        echo "  compress -r -q 20 *.mp4"
+        echo "  ls -1 | rg '\\.(mp4|mov)$' | compress -p fast"
+        echo "  find . -type f -name '*.mov' | compress -j 4"
         return 0
         ;;
       *)
@@ -173,136 +288,28 @@ function _compress() {
     esac
   done
 
-  # Функция для обработки одного файла
-  _process_file() {
-    local file="$1"
-    local pid_file=""
-    
-    # Проверяем, что файл существует
-    if [ ! -f "$file" ]; then
-      echo "Warning: File '$file' does not exist, skipping..." >&2
-      return 1
-    fi
-    
-    # Проверяем, что это видео файл
-    local extension="${file##*.}"
-    if ! [[ "${extension,,}" =~ ^(${video_formats})$ ]]; then
-      echo "Warning: '$file' is not a supported video format, skipping..." >&2
-      return 1
-    fi
-    
-    # Получаем информацию о размере файла
-    local original_size=$(stat -f%z "$file" 2>/dev/null || stat -c%s "$file" 2>/dev/null || echo "unknown")
-    
-    # Получаем базовое имя без расширения и расширение
-    local basename="${file%.*}"
-    local output_file="${basename}-compressed.${extension}"
-    
-    # Проверяем, не существует ли уже сжатый файл
-    if [ -f "$output_file" ] && [ "$replace" = false ]; then
-      echo "Warning: '$output_file' already exists, skipping..." >&2
-      return 1
-    fi
-    
-    # Готовим ffmpeg команду
-    local ffmpeg_cmd="ffmpeg -i \"$file\" -vcodec libx264 -crf $quality -preset $preset"
-    
-    # Добавляем опцию тишины если нужно
-    if [ "$quiet" = true ]; then
-      ffmpeg_cmd+=" -loglevel error"
-    fi
-    
-    # Добавляем выходной файл
-    ffmpeg_cmd+=" \"$output_file\""
-    
-    if [ "$replace" = true ]; then
-      echo "Compressing and replacing: $file (quality: $quality, preset: $preset)"
-    else
-      echo "Compressing: $file -> $output_file (quality: $quality, preset: $preset)"
-    fi
-    
-    # Выполняем сжатие
-    if eval "$ffmpeg_cmd"; then
-      # Показываем результат сжатия
-      if [ "$original_size" != "unknown" ] && [ -f "$output_file" ]; then
-        local compressed_size=$(stat -f%z "$output_file" 2>/dev/null || stat -c%s "$output_file" 2>/dev/null || echo "unknown")
-        if [ "$compressed_size" != "unknown" ]; then
-          local reduction=$(( (original_size - compressed_size) * 100 / original_size ))
-          echo "✓ Compression completed: ${reduction}% size reduction ($(numfmt --to=iec $original_size) → $(numfmt --to=iec $compressed_size))"
-        fi
-      fi
-      
-      # Если нужно заменить оригинал
-      if [ "$replace" = true ]; then
-        mv "$output_file" "$file"
-        echo "✓ Original file replaced"
-      fi
-    else
-      echo "✗ Compression failed for: $file" >&2
-      return 1
-    fi
-  }
+  if ! command -v ffmpeg >/dev/null 2>&1; then
+    echo "Error: 'ffmpeg' is required for compress" >&2
+    return 1
+  fi
 
-  # Функция для параллельной обработки
-  _process_parallel() {
-    local files=("$@")
-    local active_jobs=0
-    
-    for file in "${files[@]}"; do
-      # Ждем, если достигли лимита параллельных задач
-      while [ $active_jobs -ge $parallel_jobs ]; do
-        wait -n  # Ждем завершения любой фоновой задачи
-        ((active_jobs--))
-      done
-      
-      # Запускаем обработку в фоне
-      _process_file "$file" &
-      ((active_jobs++))
-    done
-    
-    # Ждем завершения всех оставшихся задач
-    wait
-  }
+  if [ ! -t 0 ]; then
+    while IFS= read -r file; do
+      files_array+=("$file")
+    done < <(_compress_read_stdin)
+  fi
 
-  # Проверяем наличие данных в stdin или аргументов
-  if [ -p /dev/stdin ] || [ ! -t 0 ]; then
-    # Читаем из stdin (работает с ls | grep | compress)
-    local files_array=()
-    local IFS=$'\n'
-    while read -r file; do
-      # Убираем только начальные и конечные пробелы, сохраняя пробелы в названиях
-      file=$(echo "$file" | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
-      [ -n "$file" ] && files_array+=("$file")
-    done
-    
-    if [ ${#files_array[@]} -gt 0 ]; then
-      if [ $parallel_jobs -gt 1 ] && [ ${#files_array[@]} -gt 1 ]; then
-        echo "Processing ${#files_array[@]} files with $parallel_jobs parallel jobs..."
-        _process_parallel "${files_array[@]}"
-      else
-        for file in "${files_array[@]}"; do
-          _process_file "$file"
-        done
-      fi
-    else
-      echo "No files to process" >&2
-      return 1
-    fi
-  elif [ $# -gt 0 ]; then
-    # Обрабатываем аргументы командной строки
-    if [ $parallel_jobs -gt 1 ] && [ $# -gt 1 ]; then
-      echo "Processing $# files with $parallel_jobs parallel jobs..."
-      _process_parallel "$@"
-    else
-      for file in "$@"; do 
-        _process_file "$file"
-      done
-    fi
-  else
+  if [ "$#" -gt 0 ]; then
+    files_array+=("$@")
+  fi
+
+  if [ "${#files_array[@]}" -eq 0 ]; then
     echo "Usage: compress [OPTIONS] <files...> or command | compress [OPTIONS]"
     echo "Use 'compress --help' for more information"
     return 1
   fi
+
+  _compress_run_queue "$replace" "$quality" "$preset" "$quiet" "$parallel_jobs" "${files_array[@]}"
 }
 
 alias compress='_compress'
@@ -405,7 +412,9 @@ alias logpipe='_logpipe'
 # =============================================================================
 # NPM & NODE ALIASES
 # =============================================================================
-alias ncu='npx npm-check-updates -i'
+if command -v npx >/dev/null 2>&1; then
+  alias ncu='npx npm-check-updates -i'
+fi
 
 # Улучшенная история команд
 export HISTSIZE=10000
@@ -415,7 +424,11 @@ shopt -s histappend
 
 # Автодополнение для git
 if [ -f /usr/share/bash-completion/completions/git ]; then
-    source /usr/share/bash-completion/completions/git
+  source /usr/share/bash-completion/completions/git
+elif [ -f /mingw64/share/git/completion/git-completion.bash ]; then
+  source /mingw64/share/git/completion/git-completion.bash
+elif [ -f /etc/profile.d/git-prompt.sh ]; then
+  source /etc/profile.d/git-prompt.sh
 fi
 
 
@@ -439,7 +452,18 @@ extract_failed() {
         return 1
     fi
     
+    if ! command -v bat >/dev/null 2>&1; then
+        echo "Error: 'bat' is required for extract-failed" >&2
+        return 1
+    fi
+
+    if ! command -v rg >/dev/null 2>&1; then
+        echo "Error: 'rg' is required for extract-failed" >&2
+        return 1
+    fi
+
     bat "$1" | rg "FAIL" | rg -o "[^\s]+\.(tsx|ts)?\$" | sort | uniq
 }
 alias extract-failed='extract_failed'
 export AWS_SHARED_CREDENTIALS_FILE=~/.aws/credentials
+
