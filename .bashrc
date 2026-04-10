@@ -37,6 +37,7 @@ git_develop_branch() {
   return 1
 }
 
+unalias gll 2>/dev/null
 gll() {
   if ! git rev-parse --git-dir >/dev/null 2>&1; then
     echo "Not a git repository" >&2
@@ -54,6 +55,8 @@ gll() {
   fi
 }
 
+
+unalias gcm 2>/dev/null
 gcm() {
   local main_branch
   main_branch="$(git_main_branch)" || main_branch=""
