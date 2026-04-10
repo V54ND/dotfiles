@@ -223,8 +223,8 @@ _compress_run_queue() {
 
 function _compress() {
   local replace=false
-  local quality=23
-  local preset="medium"
+  local quality=24
+  local preset="slow"
   local quiet=false
   local parallel_jobs=1
   local file
@@ -268,8 +268,8 @@ function _compress() {
         echo "Usage: compress [OPTIONS] <files...> or command | compress [OPTIONS]"
         echo "Options:"
         echo "  -r, --replace          Replace original files with compressed versions"
-        echo "  -q, --quality NUM      Set quality (0-51, lower = better quality, default: 23)"
-        echo "  -p, --preset PRESET    Set encoding preset (default: medium)"
+        echo "  -q, --quality NUM      Set quality (0-51, lower = better quality, default: 24)"
+        echo "  -p, --preset PRESET    Set encoding preset (default: slow)"
         echo "  -s, --silent           Suppress ffmpeg output"
         echo "  -j, --jobs NUM         Number of parallel jobs (default: 1)"
         echo "  -h, --help             Show this help"
@@ -466,4 +466,3 @@ extract_failed() {
 }
 alias extract-failed='extract_failed'
 export AWS_SHARED_CREDENTIALS_FILE=~/.aws/credentials
-
