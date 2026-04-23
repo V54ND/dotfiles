@@ -51,14 +51,12 @@ gll() {
     return 1
   fi
 
-  git fetch --all --prune || return 1
+  git fetch || return 1
   git pull || return 1
 
-  local dev_branch
-  dev_branch="$(git_develop_branch)" || return 0
-
-  if git ls-remote --exit-code --heads origin "$dev_branch" >/dev/null 2>&1; then
-    git fetch origin "$dev_branch:$dev_branch"
+  if git show-ref --verify --quiet refs/heads/develop || \
+     git show-ref --verify --quiet refs/remotes/origin/develop; then
+    git pull origin develop
   fi
 }
 
