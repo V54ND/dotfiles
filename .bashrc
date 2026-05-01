@@ -46,17 +46,22 @@ git_develop_branch() {
 
 unalias gll 2>/dev/null
 gll() {
+  local current_branch
+  local dev_branch
+
   if ! git rev-parse --git-dir >/dev/null 2>&1; then
     echo "Not a git repository" >&2
     return 1
   fi
 
-  git fetch || return 1
+  git fetch --all --prune || return 1
   git pull || return 1
 
-  if git show-ref --verify --quiet refs/heads/develop || \
-     git show-ref --verify --quiet refs/remotes/origin/develop; then
-    git pull origin develop
+  current_branch="$(git branch --show-current)"
+  dev_branch="$(git_develop_branch 2>/dev/null)" || dev_branch=""
+
+  if [ -n "$dev_branch" ] && [ "$current_branch" != "$dev_branch" ]; then
+    git pull origin "$dev_branch" || return 1
   fi
 }
 
