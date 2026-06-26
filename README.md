@@ -1,62 +1,93 @@
 # Dotfiles
 
-## nvim
+Windows + Git Bash dotfiles with XDG-style config under `~/.config`.
 
-LazyVim config as base config, with some extetion and solarized/osaka colorscheme
+## Bash
 
-## WezTerm
+`~/.bashrc` is only a loader. Shared Bash config lives in `~/.config/bash/*.bash` and is sourced in lexical order.
 
-Terminal emulator that I use for Windows
+- `00-env.bash`: XDG defaults
+- `10-path.bash`: Scoop shims and local bin paths
+- `10-history.bash`: Git Bash history persistence
+- `20-tools.bash`: defensive tool initialization
+- `30-aliases.bash`: shell aliases
+- `40-git.bash`: Git aliases and helpers
+- `50-node.bash`: npm aliases
+- `60-functions.bash`: custom functions
+- `99-local.example.bash`: template for private local config
+- `99-zoxide.bash`: final zoxide initialization
 
-## General tools
+## Tools
 
-- bat
-- fd
-- fzf
-- ripgrep
+Required for the main shell experience:
+
+- starship
 - zoxide
-- ffmpeg
-- imagemagick
-- nvm
-- jq
+- fzf
 - eza
-- yt-dlp
+- bat
+- lazygit
+- delta
+- ripgrep
+- fd
+- jq
+- yazi
 
-## Tools required for nvim config
+Optional tools:
 
-- gnu-sed
-- mingw
+- atuin
+- dust
+- procs
+- btop
+- bottom
+- hyperfine
+- tokei
+- doggo
+- gping
 
-## Choco install command
+Custom helpers may also use `ffmpeg`, `imagemagick`, and `yt-dlp` when installed.
 
-```
-choco install bat fd fzf ripgrep zoxide ffmpeg imagemagick nvm neovim --pre neofetch  nerd-fonts-iosevka -y
+## Scoop
 
-```
-## Scoop install command
+Install the core tools with Scoop:
 
-```
-scoop install bat fd fzf ripgrep zoxide ffmpeg imagemagick nvm winfetch yt-dlp jid jq git
-```
-
-## Homebrew install command
-
-```
-brew install bat fd fzf ripgrep zoxide ffmpeg imagemagick nvm neovim neofetch gnu-sed mingw-w64
-```
-
-## Path
-
-`XDG_CONFIG_HOME` needs to be setuped in env variables as path to
-
-```
-%USERPROFILE%\.config
-
+```bash
+scoop install starship zoxide fzf ripgrep fd bat eza lazygit delta jq yazi
 ```
 
-## Git symlink in windows
+Optional tools:
 
+```bash
+scoop install dust procs btop hyperfine tokei doggo gping
 ```
+
+Nerd Font setup:
+
+```bash
+scoop bucket add nerd-fonts
+scoop install JetBrainsMono-NF
+```
+
+## Local Config
+
+Copy `~/.config/bash/99-local.example.bash` to `~/.config/bash/99-local.bash` for machine-specific paths, work-only settings, API keys, and credentials. The real `99-local.bash` file is ignored by git.
+
+## History
+
+Git Bash history is written to `~/.bash_history`. The history module enables append mode and installs a `PROMPT_COMMAND` hook that runs `history -a` and `history -n` after each prompt cycle, so multiple open Git Bash windows append and read history without wiping each other.
+
+The hook is reinstalled after prompt tools initialize, and it is appended after existing prompt hooks so Starship can still see the real exit status of the previous command. zoxide initializes in the final Bash module so Starship does not overwrite its directory-tracking hook.
+
+## Other Configs
+
+- `~/.config/starship.toml`: Starship prompt with Git, Node, Python, Rust, Docker, Kubernetes, command duration, jobs, and status modules.
+- `~/.config/nvim`: LazyVim-based Neovim config.
+- `~/.config/wezterm`: WezTerm config for Windows.
+
+## Git Symlink In Windows
+
+If you need the Scoop Git install available at the standard Git for Windows path:
+
+```powershell
 New-Item -ItemType SymbolicLink -Path "C:\Program Files\Git" -Target "$env:USERPROFILE\scoop\apps\git\current"
 ```
-

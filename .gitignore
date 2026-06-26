@@ -19,6 +19,11 @@
 !.config/fish/**/*
 !.config/fish/**/**/*
 
+!.config/bash/
+!.config/bash/*
+.config/bash/99-local.bash
+.config/bash/local.bash
+
 !.config/starship.toml
 
 !.config/wezterm/
@@ -40,3 +45,6 @@
 !.continue/.env.example
 !.continue/agents/
 !.continue/agents/*
+
+.env
+*.secret

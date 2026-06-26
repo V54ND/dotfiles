@@ -1,11 +1,13 @@
-
 add_newline = false
 
 format = """
 $directory\
 $git_branch\
+$git_commit\
+$git_state\
 $git_status\
 $nodejs\
+$package\
 $python\
 $rust\
 $docker_context\
@@ -17,75 +19,85 @@ $status\
 $character
 """
 
-# -------------------------
-# Directory
-# -------------------------
 [directory]
 style = "bold cyan"
 truncate_to_repo = false
-truncation_length = 3
+truncation_length = 4
+read_only = " 🔒"
 
-# -------------------------
-# Git branch
-# -------------------------
 [git_branch]
 symbol = " "
 style = "bold purple"
+format = "[$symbol$branch(:$remote_branch)]($style) "
 
-# -------------------------
-# Git status
-# -------------------------
+[git_commit]
+commit_hash_length = 7
+tag_symbol = " 🏷 "
+format = "[$hash$tag]($style) "
+
+[git_state]
+format = "\\([$state( $progress_current/$progress_total)]($style)\\) "
+
 [git_status]
-style = "red"
-format = "[$all_status$ahead_behind]($style)"
+style = "bold red"
+format = "([$all_status$ahead_behind]($style) )"
+conflicted = "=${count} "
+ahead = "⇡${count} "
+behind = "⇣${count} "
+diverged = "⇕⇡${ahead_count}⇣${behind_count} "
+up_to_date = ""
+untracked = "?${count} "
+stashed = "\\$${count} "
+modified = "!${count} "
+staged = "+${count} "
+renamed = "»${count} "
+deleted = "✘${count} "
 
-# -------------------------
-# Node
-# -------------------------
 [nodejs]
 symbol = "⬢ "
 style = "bold green"
+format = "[$symbol$version]($style) "
 
-# -------------------------
-# Python
-# -------------------------
+[package]
+symbol = "📦 "
+format = "[$symbol$version]($style) "
+
 [python]
 symbol = "🐍 "
 style = "yellow"
+format = "[${symbol}${pyenv_prefix}(${version})( \\($virtualenv\\))]($style) "
 
-# -------------------------
-# Docker
-# -------------------------
+[rust]
+symbol = "🦀 "
+style = "bold red"
+format = "[$symbol$version]($style) "
+
 [docker_context]
 symbol = "🐳 "
 style = "blue"
+format = "[$symbol$context]($style) "
 
-# -------------------------
-# K8s
-# -------------------------
 [kubernetes]
 symbol = "☸ "
 style = "blue"
+format = "[$symbol$context(/$namespace)]($style) "
+disabled = false
 
-# -------------------------
-# Command duration
-# -------------------------
 [cmd_duration]
 min_time = 1000
 format = "⏱ [$duration]($style) "
 
-# -------------------------
-# Exit status
-# -------------------------
+[jobs]
+symbol = "✦"
+number_threshold = 1
+format = "[$symbol$number]($style) "
+
 [status]
 style = "bold red"
 symbol = "❌ "
 format = "[$symbol$status]($style) "
 disabled = false
 
-# -------------------------
-# Prompt symbol
-# -------------------------
 [character]
 success_symbol = "[❯](bold green)"
 error_symbol = "[❯](bold red)"
