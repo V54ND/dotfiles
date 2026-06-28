@@ -13,7 +13,8 @@ end)
 local config = wezterm.config_builder()
 
 -- 🎨 Цветовые схемы
-config.color_scheme = 'Jellybeans'
+config.color_scheme = 'Kanagawa (Gogh)'
+
 
 -- -- 🖥 Tab Bar
 config.use_fancy_tab_bar = true

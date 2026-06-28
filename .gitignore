@@ -46,5 +46,8 @@
 !.continue/agents/
 !.continue/agents/*
 
+!.config/winfetch
+!.config/winfetch/*
+
 .env
 *.secret
