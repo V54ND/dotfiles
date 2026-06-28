@@ -15,18 +15,9 @@ __history_sync() {
   builtin history -n
 }
 
-__history_prompt_command_contains() {
+__history_install_prompt_command() {
   case ";${PROMPT_COMMAND:-};" in
-    *";$1;"*) return 0 ;;
-    *) return 1 ;;
+    *";__history_sync;"*) ;;
+    *) PROMPT_COMMAND="${PROMPT_COMMAND:+$PROMPT_COMMAND; }__history_sync" ;;
   esac
 }
-
-__history_install_prompt_command() {
-  __history_prompt_command_contains "__history_sync" && return 0
-
-  # Keep status-aware prompt hooks first; Starship should see the real exit code.
-  PROMPT_COMMAND="${PROMPT_COMMAND:+$PROMPT_COMMAND; }__history_sync"
-}
-
-__history_install_prompt_command

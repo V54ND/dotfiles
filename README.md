@@ -15,6 +15,7 @@ Windows + Git Bash dotfiles with XDG-style config under `~/.config`.
 - `50-node.bash`: npm aliases
 - `60-functions.bash`: custom functions
 - `99-local.example.bash`: template for private local config
+- `99-required-tools.bash`: startup warning for missing required tools
 - `99-zoxide.bash`: final zoxide initialization
 
 ## Tools
@@ -71,6 +72,8 @@ scoop install JetBrainsMono-NF
 ## Local Config
 
 Copy `~/.config/bash/99-local.example.bash` to `~/.config/bash/99-local.bash` for machine-specific paths, work-only settings, API keys, and credentials. The real `99-local.bash` file is ignored by git.
+
+Set `DOTFILES_CHECK_REQUIRED_TOOLS=0` in local config to silence the required-tool startup check.
 
 ## History
 
