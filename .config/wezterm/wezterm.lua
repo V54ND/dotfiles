@@ -13,9 +13,7 @@ end)
 local config = wezterm.config_builder()
 
 -- 🎨 Цветовые схемы
-config.color_scheme = 'Catppuccin Mocha (Gogh)'
-config.color_scheme = 'Ayu Mirage (Gogh)'
-config.color_scheme = 'Solarized (dark) (terminal.sexy)'
+config.color_scheme = 'Jellybeans'
 
 -- -- 🖥 Tab Bar
 config.use_fancy_tab_bar = true
