@@ -66,7 +66,7 @@ Nerd Font setup:
 
 ```bash
 scoop bucket add nerd-fonts
-scoop install JetBrainsMono-NF
+scoop install JetBrainsMono-NF Monaspace-NF-Mono Iosevka-NF
 ```
 
 ## Local Config

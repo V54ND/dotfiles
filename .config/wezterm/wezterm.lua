@@ -61,8 +61,8 @@ end
 
 
 -- 🔤 Шрифт
-config.font = wezterm.font("Iosevka Nerd Font")
-config.font_size = 14
+config.font = wezterm.font("MonaspiceNe Nerd Font Mono")
+config.font_size = 12
 
 -- -- 📜 Scrollback
 config.scrollback_lines = 5000
