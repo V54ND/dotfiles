@@ -1,7 +1,7 @@
 # shellcheck shell=bash
 
-unalias gll gcm gswm gswd 2>/dev/null || true
-unset -f gll gcm gswm gswd 2>/dev/null || true
+unalias gll gcm gswm gswd gup 2>/dev/null || true
+unset -f gll gcm gswm gswd gup 2>/dev/null || true
 
 alias gf='git fetch'
 alias gfa='git fetch --all --prune'
@@ -44,6 +44,13 @@ git_develop_branch() {
   local ref
   for ref in develop dev devel development; do
     if git show-ref -q --verify "refs/heads/$ref"; then
+      printf '%s\n' "$ref"
+      return 0
+    fi
+  done
+
+  for ref in develop dev devel development; do
+    if git show-ref -q --verify "refs/remotes/origin/$ref"; then
       printf '%s\n' "$ref"
       return 0
     fi
@@ -120,6 +127,6 @@ gup() {
 
   if [ "$current_branch" != "$dev_branch" ] &&
     git ls-remote --exit-code --heads origin "$dev_branch" >/dev/null 2>&1; then
-    git fetch origin "$dev_branch:$dev_branch"
+    git fetch origin "$dev_branch:refs/heads/$dev_branch"
   fi
 }
