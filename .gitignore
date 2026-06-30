@@ -16,8 +16,6 @@
 .config/bash/99-local.bash
 .config/bash/local.bash
 
-!.config/firefox/
-!.config/firefox/*
 
 !.config/nvim/
 !.config/nvim/**
