@@ -1,53 +1,35 @@
-# Ignore everything
+# Ignore everything by default.
 *
-# But not these files...
-!.gitignore
 
+# Top-level dotfiles and manifests.
+!.gitignore
 !README.md
+!.bashrc
+!.zshrc
+!scoop.json
 
-
-!.gitignore
+# Selected config files and directories.
 !.config/
-.config/*
-!.config/nvim/
-!.config/nvim/*
-!.config/nvim/**/*
-!.config/nvim/**/**/*
-
-!.config/fish/
-!.config/fish/*
-!.config/fish/**/*
-!.config/fish/**/**/*
 
 !.config/bash/
 !.config/bash/*
 .config/bash/99-local.bash
 .config/bash/local.bash
 
+!.config/firefox/
+!.config/firefox/*
+
+!.config/nvim/
+!.config/nvim/**
+
 !.config/starship.toml
 
 !.config/wezterm/
 !.config/wezterm/*
 
-!.config/firefox/
-!.config/firefox/*
-
-!.bashrc
-
-
-!migrate_choco_to_scoop.sh
-
-!scoop.json
-!choco_list.txt
-
-!.continue/
-!.continue/config.yaml
-!.continue/.env.example
-!.continue/agents/
-!.continue/agents/*
-
-!.config/winfetch
+!.config/winfetch/
 !.config/winfetch/*
 
+# Local secrets.
 .env
 *.secret
