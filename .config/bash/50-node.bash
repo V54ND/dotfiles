@@ -9,3 +9,5 @@ alias nd='npm run dev'
 if command -v npx >/dev/null 2>&1; then
   alias ncu='npx npm-check-updates -i'
 fi
+
+alias vt='npx vitest "$(fzf)"'
