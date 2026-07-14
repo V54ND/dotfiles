@@ -118,15 +118,18 @@ gup() {
     return 1
   fi
 
+  local current_branch dev_branch
+  current_branch="$(git branch --show-current)" || return 1
+  dev_branch="$(git_develop_branch)"
+
   git fetch --all --prune || return 1
+
   git pull --ff-only || return 1
 
-  local current_branch dev_branch
-  dev_branch="$(git_develop_branch)" || return 0
-  current_branch="$(git branch --show-current)" || return 0
-
-  if [ "$current_branch" != "$dev_branch" ] &&
+  if [ -n "$current_branch" ] &&
+    [ "$current_branch" != "$dev_branch" ] &&
+    [ -n "$dev_branch" ] &&
     git ls-remote --exit-code --heads origin "$dev_branch" >/dev/null 2>&1; then
-    git fetch origin "$dev_branch:refs/heads/$dev_branch"
+    git pull origin "$dev_branch" || return 1
   fi
 }
