@@ -133,3 +133,32 @@ gup() {
     git pull origin "$dev_branch" || return 1
   fi
 }
+
+gswf() {
+  local branch
+
+  git fetch --prune --quiet
+
+  branch="$(
+    {
+      git for-each-ref --format='%(refname:short)' refs/heads/
+      git for-each-ref --format='%(refname:short)' refs/remotes/origin/ |
+        sed 's#^origin/##'
+    } |
+    grep -v '^HEAD$' |
+    sort -u |
+    fzf \
+      --prompt='Switch branch > ' \
+      --height=40% \
+      --layout=reverse \
+      --border
+  )"
+
+  [[ -z "$branch" ]] && return
+
+  if git show-ref --verify --quiet "refs/heads/$branch"; then
+    git switch "$branch"
+  else
+    git switch --track "origin/$branch"
+  fi
+}
