@@ -14,6 +14,7 @@ Windows + Git Bash dotfiles with XDG-style config under `~/.config`.
 - `40-git.bash`: Git aliases and helpers
 - `50-node.bash`: npm aliases
 - `60-functions.bash`: custom functions
+- `docs.sh`: Bash function documentation generator and viewer
 - `99-local.example.bash`: template for private local config
 - `99-required-tools.bash`: startup warning for missing required tools
 - `99-zoxide.bash`: final zoxide initialization
@@ -48,6 +49,12 @@ Optional tools:
 
 Custom helpers may also use `ffmpeg`, `imagemagick`, and `yt-dlp` when installed.
 
+Documentation and maintenance helpers:
+
+- shdoc
+- shellcheck
+- glow
+
 ## Scoop
 
 Install the core tools with Scoop:
@@ -62,12 +69,58 @@ Optional tools:
 scoop install dust procs btop hyperfine tokei doggo gping
 ```
 
+Documentation tools:
+
+```bash
+scoop install shellcheck glow
+```
+
 Nerd Font setup:
 
 ```bash
 scoop bucket add nerd-fonts
-scoop install JetBrainsMono-NF Monaspace-NF-Mono Iosevka-NF
+scoop install JetBrainsMono-NF Monaspace-NF-Mono
 ```
+
+## Bash Function Docs
+
+Install `shdoc`:
+
+```bash
+mkdir -p ~/.local/bin
+
+curl -fsSL \
+  https://raw.githubusercontent.com/reconquest/shdoc/v1.4/shdoc \
+  -o ~/.local/bin/shdoc
+
+chmod +x ~/.local/bin/shdoc
+```
+
+Make sure `~/.local/bin` is in `PATH`, then reload Bash:
+
+```bash
+source ~/.bashrc
+```
+
+Generate Markdown docs for documented Bash functions:
+
+```bash
+bash_docs
+```
+
+Generated files are written to:
+
+```bash
+~/.config/bash/docs/generated
+```
+
+View the generated docs:
+
+```bash
+bash_docs_view
+```
+
+`bash_docs_view` uses `glow` when available, falls back to `bat`, then `less`.
 
 ## Local Config
 

@@ -15,6 +15,8 @@
 !.config/bash/*
 .config/bash/99-local.bash
 .config/bash/local.bash
+!.config/bash/docs/generated/
+!.config/bash/docs/generated/*
 
 
 !.config/nvim/

@@ -1,5 +1,16 @@
 # shellcheck shell=bash
 
+# @description
+# Formats a byte count with numfmt when available and falls back to a plain byte label.
+#
+# @arg $1 integer Byte count to format.
+#
+# @example
+#   _compress_human_size 1048576
+#
+# @stdout The formatted size.
+#
+# @exitcode 0 The size was printed.
 _compress_human_size() {
   if command -v numfmt >/dev/null 2>&1; then
     numfmt --to=iec "$1"
@@ -8,6 +19,15 @@ _compress_human_size() {
   fi
 }
 
+# @description
+# Reads file paths from stdin, removes trailing carriage returns, and skips empty lines.
+#
+# @example
+#   printf '%s\r\n' video.mp4 | _compress_read_stdin
+#
+# @stdout Normalized non-empty input lines.
+#
+# @exitcode 0 Input was consumed successfully.
 _compress_read_stdin() {
   local line
   while IFS= read -r line || [ -n "$line" ]; do
@@ -16,6 +36,23 @@ _compress_read_stdin() {
   done
 }
 
+# @description
+# Compresses one supported video file with ffmpeg and optionally replaces the original file.
+#
+# @arg $1 string Video file to compress.
+# @arg $2 boolean Whether to replace the original file.
+# @arg $3 integer ffmpeg CRF quality value.
+# @arg $4 string ffmpeg encoder preset.
+# @arg $5 boolean Whether to suppress ffmpeg output.
+#
+# @example
+#   _compress_process_file video.mp4 false 23 fast false
+#
+# @stdout Progress and size reduction messages.
+# @stderr Warnings for missing files, unsupported formats, and failed compression.
+#
+# @exitcode 0 The file was compressed successfully.
+# @exitcode 1 The file was missing, unsupported, or skipped.
 _compress_process_file() {
   local file="$1"
   local replace="$2"
@@ -81,6 +118,24 @@ _compress_process_file() {
   fi
 }
 
+# @description
+# Runs video compression for one or more files, optionally scheduling several jobs in parallel.
+#
+# @arg $1 boolean Whether to replace original files.
+# @arg $2 integer ffmpeg CRF quality value.
+# @arg $3 string ffmpeg encoder preset.
+# @arg $4 boolean Whether to suppress ffmpeg output.
+# @arg $5 integer Number of parallel jobs to run.
+# @arg $@ string Video files to process after the first five arguments.
+#
+# @example
+#   _compress_run_queue false 23 fast false 2 video.mp4 clip.mov
+#
+# @stdout Queue progress and per-file compression messages.
+# @stderr Per-file warnings and compression errors.
+#
+# @exitcode 0 All files were processed successfully.
+# @exitcode 1 At least one file failed or was skipped.
 _compress_run_queue() {
   local replace="$1"
   local quality="$2"
@@ -124,6 +179,23 @@ _compress_run_queue() {
   return "$failed"
 }
 
+# @description
+# Compresses video files passed as arguments or through stdin using ffmpeg.
+#
+# @arg $@ string Options and file paths accepted by compress.
+#
+# @example
+#   compress video.mp4
+# @example
+#   compress -r -q 20 *.mp4
+# @example
+#   find . -type f -name '*.mov' | compress -j 4
+#
+# @stdout Usage text, progress messages, and compression summaries.
+# @stderr Invalid options, missing tools, and per-file warnings.
+#
+# @exitcode 0 Help was shown or all files were compressed successfully.
+# @exitcode 1 Options were invalid, ffmpeg was missing, no files were provided, or a file failed.
 _compress() {
   local replace=false
   local quality=23
@@ -217,6 +289,21 @@ _compress() {
 
 alias compress='_compress'
 
+# @description
+# Displays piped input as a trimmed list, with optional numbering, prefixing, and passthrough output.
+#
+# @arg $@ string Options accepted by logpipe.
+#
+# @example
+#   find . -name '*.txt' | logpipe -n
+# @example
+#   ls | logpipe -t | compress
+#
+# @stdout Formatted input, passthrough input, usage text, or help text depending on options and pipeline state.
+# @stderr Formatted input when passthrough output is enabled.
+#
+# @exitcode 0 Input was displayed or help was shown successfully.
+# @exitcode 1 An option was invalid or no piped input was provided.
 _logpipe() {
   local counter=1
   local show_numbers=false
@@ -303,6 +390,19 @@ _logpipe() {
 
 alias logpipe='_logpipe'
 
+# @description
+# Extracts unique TypeScript and TSX file paths from FAIL lines in a text file.
+#
+# @arg $1 string File to scan for failed test entries.
+#
+# @example
+#   extract-failed test-output.log
+#
+# @stdout Matching .ts and .tsx paths, or usage and file errors for invalid input.
+# @stderr Prints an error when rg is not available.
+#
+# @exitcode 0 Matching paths were extracted successfully.
+# @exitcode 1 The input file was missing, not found, or rg was unavailable.
 extract_failed() {
   if [ -z "$1" ]; then
     echo "Usage: extract-failed <filename>"
@@ -324,6 +424,18 @@ extract_failed() {
 
 alias extract-failed='extract_failed'
 
+# @description
+# Creates a directory and changes the current shell into it.
+#
+# @arg $1 string Directory path to create and enter.
+#
+# @example
+#   mkcd scratch/new-project
+#
+# @stderr Prints usage text when no directory is provided.
+#
+# @exitcode 0 The directory was created and entered.
+# @exitcode 1 No directory was provided, mkdir failed, or cd failed.
 mkcd() {
   if [ -z "$1" ]; then
     echo "Usage: mkcd <directory>" >&2
