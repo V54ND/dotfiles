@@ -7,7 +7,10 @@
 
 ### compress
 
-Compresses video from any input format to H.264 MP4 using single-pass, constant-quality encoding.
+Compresses each input video to H.264 MP4 using single-pass, constant-quality encoding.
+By default, it writes <input-name>-compressed.mp4 and preserves the source.
+With --replace, it replaces an MP4 in place; for other containers it removes
+the source only after success and writes a same-name .mp4 file instead.
 
 #### Example
 
@@ -15,24 +18,47 @@ Compresses video from any input format to H.264 MP4 using single-pass, constant-
 compress video.mp4 clip.mov recording.mkv
 rg --files -g '*.mp4' -g '*.mov' -g '*.mkv' | compress
 compress --quality 26 --preset medium video.webm
+compress --replace recording.mov
 ```
+
+#### Options
+
+* **-r** | **--replace**
+
+  Replace the input after successful encoding; source files remain intact on failure.
+
+* **-q \<CRF\>** | **--quality \<CRF\>**
+
+  Set x264 CRF from 0 to 51; higher values produce smaller, lower-quality files.
+
+* **-p \<NAME\>** | **--preset \<NAME\>**
+
+  Set the x264 speed preset from ultrafast through veryslow.
+
+* **-h** | **--help**
+
+  Show usage information without encoding.
 
 #### Arguments
 
-* **...** (string): Options and video paths. Newline-delimited paths are also accepted from stdin.
+* **...** (string): Video paths after options. Newline-delimited paths can also be supplied through stdin.
 
 #### Exit codes
 
 * **0**: Every video was compressed successfully.
 * **1**: An option was invalid, a dependency was missing, no files were supplied, or at least one input failed.
 
+#### Input on stdin
+
+* Newline-delimited video paths; combined with any paths passed as arguments.
+
 #### Output on stdout
 
-* Progress, size reduction, and output file paths.
+* Progress plus the created or replaced MP4 path and its size reduction when available.
 
 #### Output on stderr
 
-* Invalid options, missing dependencies, skipped files, and ffmpeg errors.
+* Invalid options, missing dependencies, skipped files, inability to remove a replaced source, and ffmpeg errors.
 
 ### _logpipe
 

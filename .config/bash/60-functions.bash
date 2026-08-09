@@ -4,9 +4,18 @@
 # failed-test extraction, and directory creation.
 
 # @description
-# Compresses video from any input format to H.264 MP4 using single-pass, constant-quality encoding.
+# Compresses each input video to H.264 MP4 using single-pass, constant-quality encoding.
+# By default, it writes <input-name>-compressed.mp4 and preserves the source.
+# With --replace, it replaces an MP4 in place; for other containers it removes
+# the source only after success and writes a same-name .mp4 file instead.
 #
-# @arg $@ string Options and video paths. Newline-delimited paths are also accepted from stdin.
+# @option -r | --replace Replace the input after successful encoding; source files remain intact on failure.
+# @option -q <CRF> | --quality <CRF> Set x264 CRF from 0 to 51; higher values produce smaller, lower-quality files.
+# @option -p <NAME> | --preset <NAME> Set the x264 speed preset from ultrafast through veryslow.
+# @option -h | --help Show usage information without encoding.
+#
+# @arg $@ string Video paths after options. Newline-delimited paths can also be supplied through stdin.
+# @stdin Newline-delimited video paths; combined with any paths passed as arguments.
 #
 # @example
 #   compress video.mp4 clip.mov recording.mkv
@@ -14,23 +23,31 @@
 #   rg --files -g '*.mp4' -g '*.mov' -g '*.mkv' | compress
 # @example
 #   compress --quality 26 --preset medium video.webm
+# @example
+#   compress --replace recording.mov
 #
-# @stdout Progress, size reduction, and output file paths.
-# @stderr Invalid options, missing dependencies, skipped files, and ffmpeg errors.
+# @stdout Progress plus the created or replaced MP4 path and its size reduction when available.
+# @stderr Invalid options, missing dependencies, skipped files, inability to remove a replaced source, and ffmpeg errors.
 #
 # @exitcode 0 Every video was compressed successfully.
 # @exitcode 1 An option was invalid, a dependency was missing, no files were supplied, or at least one input failed.
 compress() {
   local quality="${COMPRESS_CRF:-30}"
   local preset="${COMPRESS_PRESET:-fast}"
-  local file output
+  local replace=false
+  local file output temp_output backup_output
   local directory basename stem
+  local replace_in_place=false
   local original_size compressed_size reduction
   local failed=0
   local files=()
 
   while [ "$#" -gt 0 ]; do
     case "$1" in
+      -r|--replace)
+        replace=true
+        shift
+        ;;
       -q|--quality)
         if [ "$#" -lt 2 ]; then
           echo "Error: --quality requires a CRF value" >&2
@@ -56,12 +73,13 @@ compress() {
           "Paths may be passed as arguments or one per line through stdin." \
           "" \
           "Options:" \
-          "  -q, --quality CRF   Quality from 0-51 (default: 51; higher is smaller)" \
+          "  -r, --replace       Remove the source after a successful MP4 encode" \
+          "  -q, --quality CRF   Quality from 0-51 (default: 30; higher is smaller)" \
           "  -p, --preset NAME   x264 preset (default: fast; faster presets encode faster)" \
           "  -h, --help          Show this help" \
           "" \
           "Environment: COMPRESS_CRF and COMPRESS_PRESET override defaults." \
-          "Output: <input-name>-compressed.mp4; source files are never replaced." \
+          "Output: <input-name>-compressed.mp4, or <input-name>.mp4 with --replace." \
           "The first audio stream is encoded as AAC; other streams are omitted."
         return 0
         ;;
@@ -140,9 +158,20 @@ compress() {
     basename="${file##*/}"
     stem="${basename%.*}"
     [ -n "$stem" ] || stem="$basename"
-    output="${directory}${stem}-compressed.mp4"
+    replace_in_place=false
+    if [ "$replace" = true ]; then
+      case "$basename" in
+        *.[mM][pP]4)
+          output="$file"
+          replace_in_place=true
+          ;;
+        *) output="${directory}${stem}.mp4" ;;
+      esac
+    else
+      output="${directory}${stem}-compressed.mp4"
+    fi
 
-    if [ -e "$output" ]; then
+    if [ -e "$output" ] && [ "$replace_in_place" = false ]; then
       echo "Warning: '$output' already exists, skipping" >&2
       failed=1
       continue
@@ -150,6 +179,15 @@ compress() {
 
     original_size=$(wc -c <"$file" 2>/dev/null)
     original_size="${original_size//[[:space:]]/}"
+    reduction=
+
+    temp_output="$output"
+    if [ "$replace" = true ]; then
+      temp_output="${directory}${stem}.compressing.$$.$RANDOM.mp4"
+      while [ -e "$temp_output" ]; do
+        temp_output="${directory}${stem}.compressing.$$.$RANDOM.mp4"
+      done
+    fi
 
     printf 'Compressing: %s -> %s (H.264 CRF %s, preset %s)\n' \
       "$file" "$output" "$quality" "$preset"
@@ -170,19 +208,57 @@ compress() {
       -c:a aac \
       -b:a 128k \
       -movflags +faststart \
-      "$output"; then
-      compressed_size=$(wc -c <"$output" 2>/dev/null)
+      "$temp_output"; then
+      compressed_size=$(wc -c <"$temp_output" 2>/dev/null)
       compressed_size="${compressed_size//[[:space:]]/}"
 
       if [[ "$original_size" =~ ^[0-9]+$ ]] &&
         [[ "$compressed_size" =~ ^[0-9]+$ ]] && [ "$original_size" -gt 0 ]; then
         reduction=$(((original_size - compressed_size) * 100 / original_size))
-        printf 'Created: %s (%s%% size reduction)\n' "$output" "$reduction"
+      fi
+
+      if [ "$replace" = false ]; then
+        if [ -n "$reduction" ]; then
+          printf 'Created: %s (%s%% size reduction)\n' "$output" "$reduction"
+        else
+          printf 'Created: %s\n' "$output"
+        fi
+        continue
+      fi
+
+      if [ -n "$reduction" ]; then
+        printf 'Encoded: %s (%s%% size reduction)\n' "$output" "$reduction"
       else
-        printf 'Created: %s\n' "$output"
+        printf 'Encoded: %s\n' "$output"
+      fi
+
+      if [ "$replace_in_place" = true ]; then
+        backup_output="${file}.compress-backup.$$.$RANDOM"
+        while [ -e "$backup_output" ]; do
+          backup_output="${file}.compress-backup.$$.$RANDOM"
+        done
+
+        if mv -- "$file" "$backup_output" && mv -- "$temp_output" "$output"; then
+          rm -f -- "$backup_output"
+          printf 'Replaced: %s\n' "$output"
+        else
+          [ -e "$backup_output" ] && mv -- "$backup_output" "$file"
+          rm -f -- "$temp_output"
+          failed=1
+        fi
+      elif mv -- "$temp_output" "$output"; then
+        if rm -f -- "$file"; then
+          printf 'Replaced: %s (removed %s)\n' "$output" "$file"
+        else
+          echo "Warning: Created '$output', but could not remove '$file'" >&2
+          failed=1
+        fi
+      else
+        rm -f -- "$temp_output"
+        failed=1
       fi
     else
-      rm -f -- "$output"
+      rm -f -- "$temp_output"
       failed=1
     fi
   done
