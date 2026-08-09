@@ -3,7 +3,6 @@
 [CmdletBinding(SupportsShouldProcess = $true)]
 param(
     [switch]$WithOptional,
-    [switch]$SkipBleSh,
     [switch]$SkipWezTerm
 )
 
@@ -111,34 +110,6 @@ foreach ($app in $apps) {
         if ($LASTEXITCODE -ne 0) {
             $failures.Add($app)
         }
-    }
-}
-
-$xdgDataHome = if ([string]::IsNullOrWhiteSpace($env:XDG_DATA_HOME)) {
-    Join-Path $HOME '.local\share'
-}
-else {
-    $env:XDG_DATA_HOME
-}
-$bleshFile = Join-Path $xdgDataHome 'blesh\ble.sh'
-$bleshInstaller = Join-Path $HOME 'install-blesh.sh'
-
-if ($SkipBleSh) {
-    Write-Host '[skip] ble.sh'
-}
-elseif (Test-Path -LiteralPath $bleshFile) {
-    Write-Host '[skip] ble.sh'
-}
-elseif (-not (Get-Command bash -ErrorAction SilentlyContinue)) {
-    $failures.Add('ble.sh (bash is unavailable)')
-}
-elseif (-not (Test-Path -LiteralPath $bleshInstaller -PathType Leaf)) {
-    $failures.Add('ble.sh (install-blesh.sh is missing)')
-}
-elseif ($PSCmdlet.ShouldProcess('ble.sh nightly', 'bash install-blesh.sh')) {
-    & bash $bleshInstaller
-    if ($LASTEXITCODE -ne 0) {
-        $failures.Add('ble.sh')
     }
 }
 

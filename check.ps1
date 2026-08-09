@@ -116,15 +116,6 @@ Invoke-Check 'ShellCheck errors' {
     Invoke-Native shellcheck (@('--severity=error', '--shell=bash') + $shellFiles)
 }
 
-Invoke-Check 'ble.sh config' {
-    $blesh = Join-Path $HOME '.local\share\blesh\ble.sh'
-    if (Test-Path -LiteralPath $blesh -PathType Leaf) {
-        $blesh = (& cygpath -u $blesh).Trim()
-        $config = (& cygpath -u (Join-Path $root '.config\blesh\init.sh')).Trim()
-        Invoke-Native bash @('-c', 'source -- "$1" --lib && source -- "$2"', '_', $blesh, $config)
-    }
-}
-
 Invoke-Check 'PowerShell syntax' {
     foreach ($path in ($files | Where-Object { [IO.Path]::GetExtension($_) -eq '.ps1' })) {
         $tokens = $null

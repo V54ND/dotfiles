@@ -25,7 +25,7 @@ The checkout stops rather than overwriting conflicting untracked files. After re
 & "$HOME\bootstrap.ps1"
 ```
 
-Pass `-WithOptional` to include the extra CLI tools listed below. The script is idempotent, adds the required Scoop buckets, installs the Nerd Fonts, installs ble.sh, and installs current WezTerm through WinGet. Use `-SkipBleSh` on a machine where the enhanced Bash editor is not wanted, or `-WhatIf` to preview everything.
+Pass `-WithOptional` to include the extra CLI tools listed below. The script is idempotent, adds the required Scoop buckets, installs the Nerd Fonts, and installs current WezTerm through WinGet. Use `-WhatIf` to preview everything.
 
 Open a new Git Bash, then verify the environment:
 
@@ -45,7 +45,6 @@ Run the repository checks from PowerShell before committing changes:
 
 - `00-env.bash`: XDG defaults
 - `01-local.example.bash`: template for early machine-local config
-- `05-blesh.bash`: optional early ble.sh initialization
 - `10-history.bash`: Git Bash history persistence
 - `10-path.bash`: Scoop shims and local bin paths
 - `20-tools.bash`: defensive tool initialization
@@ -55,23 +54,8 @@ Run the repository checks from PowerShell before committing changes:
 - `60-functions.bash`: custom functions
 - `docs.sh`: Bash function documentation generator and viewer
 - `99-zoxide.bash`: final zoxide initialization
-- `99-zz-blesh.bash`: late ble.sh attach after the other prompt tools
 
 The shell stays quiet when a tool is missing. Run `dotfiles-doctor` whenever you want a complete dependency and config check.
-
-### ble.sh
-
-ble.sh is deliberately isolated but fully integrated: it loads before completion and prompt hooks, then attaches after Starship and Zoxide. Syntax highlighting, TAB completion, delayed inline completion, history suggestions, and cross-session history sharing are enabled. The official fzf adapters keep `Ctrl-R` and fzf completion compatible with the ble.sh line editor.
-
-The tracked configuration lives in `~/.config/blesh/init.sh`. Installation is handled by `install-blesh.sh`; the integration itself is contained in `05-blesh.bash` and `99-zz-blesh.bash`.
-
-To disable ble.sh on an RDP or slow terminal without changing tracked files, put this in `~/.config/bash/01-local.bash`:
-
-```bash
-export DOTFILES_ENABLE_BLESH=0
-```
-
-Plain Bash and the normal fzf bindings will continue to work. Run `bash ~/install-blesh.sh` manually to install or refresh the nightly build.
 
 ## Tools
 
@@ -82,7 +66,6 @@ Core shell and editor tools are installed by `bootstrap.ps1`:
 - neovim, tree-sitter, gcc, make
 - ffmpeg, imagemagick, yt-dlp
 - shellcheck, glow, winfetch
-- ble.sh for optional enhanced Bash editing and fzf integration
 - JetBrains Mono and Monaspace Nerd Fonts
 
 Optional tools (`bootstrap.ps1 -WithOptional`):
@@ -129,15 +112,14 @@ Copy `~/.config/bash/01-local.example.bash` to `~/.config/bash/01-local.bash` fo
 
 ## History
 
-Git Bash history is written to `~/.bash_history`. With ble.sh enabled, its `history_share` integration synchronizes history after every command. When ble.sh is missing or disabled, the Bash module falls back to a `PROMPT_COMMAND` hook that runs `history -a` and `history -n`. In both modes, fzf provides the `Ctrl-R` search interface.
+Git Bash history is written to `~/.bash_history`. A `PROMPT_COMMAND` hook runs `history -a` and `history -n` after every command to synchronize concurrent sessions. Fzf provides the `Ctrl-R` search interface.
 
-The fallback hook is installed after prompt tools initialize so Starship can still see the previous command status. Zoxide initializes before the final ble.sh attach so all prompt hooks are captured by the line editor.
+The history hook is installed after prompt tools initialize so Starship can still see the previous command status.
 
 ## Config Map
 
 - `~/.config/starship.toml`: cross-platform prompt
 - `~/.config/nvim`: LazyVim-based Neovim config
-- `~/.config/blesh/init.sh`: isolated ble.sh behavior
 - `~/.config/wezterm`: cross-platform terminal config
 - `~/.config/winfetch/config.ps1`: Windows system summary
 

@@ -102,40 +102,12 @@ for command_name in "${optional_commands[@]}"; do
   check_optional_command "$command_name"
 done
 
-printf '\nble.sh:\n'
-
-case "${DOTFILES_ENABLE_BLESH:-1}" in
-  0|false|no|off)
-    ok 'disabled by DOTFILES_ENABLE_BLESH'
-    ;;
-  *)
-    blesh_file="${XDG_DATA_HOME:-$HOME/.local/share}/blesh/ble.sh"
-    case "$blesh_file" in
-      [[:alpha:]]:[\\/]*) blesh_file=$(cygpath -u "$blesh_file") ;;
-    esac
-    if [ -r "$blesh_file" ]; then
-      ok 'installed (completion, history sharing, and fzf integration enabled)'
-      if bash -c 'source -- "$1" --lib && source -- "$2"' \
-        _ "$blesh_file" "$HOME/.config/blesh/init.sh"
-      then
-        ok 'configuration loads'
-      else
-        fail 'configuration does not load'
-      fi
-    else
-      warn 'not installed; run bash ~/install-blesh.sh or disable it with DOTFILES_ENABLE_BLESH=0'
-    fi
-    unset blesh_file
-    ;;
-esac
-
 printf '\nConfiguration:\n'
 
 config_files=(
   "$HOME/.bash_profile"
   "$HOME/.bashrc"
   "$HOME/.zshrc"
-  "$HOME/.config/blesh/init.sh"
   "$HOME/.config/starship.toml"
   "$HOME/.config/nvim/init.lua"
   "$HOME/.config/wezterm/wezterm.lua"
@@ -158,8 +130,7 @@ fi
 if bash -n \
   "$HOME/.bash_profile" \
   "$HOME/.bashrc" \
-  "$HOME"/.config/bash/*.bash \
-  "$HOME/.config/blesh/init.sh"
+  "$HOME"/.config/bash/*.bash
 then
   ok 'Bash syntax'
 else

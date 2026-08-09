@@ -17,14 +17,12 @@ do
 done
 unset completion_file
 
-if [ -z "${BLE_VERSION:-}" ] && command -v fzf >/dev/null 2>&1; then
+if command -v fzf >/dev/null 2>&1; then
   eval "$(fzf --bash)"
 fi
 
 command -v starship >/dev/null 2>&1 && eval "$(starship init bash)"
 
-if [ -z "${BLE_VERSION:-}" ] && \
-  declare -F __history_install_prompt_command >/dev/null 2>&1
-then
+if declare -F __history_install_prompt_command >/dev/null 2>&1; then
   __history_install_prompt_command
 fi

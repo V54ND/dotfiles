@@ -9,6 +9,3 @@
 # Local paths and work-only settings are also good candidates for 01-local.bash.
 # export AWS_SHARED_CREDENTIALS_FILE="$HOME/.aws/credentials"
 # export PATH="$HOME/bin:$PATH"
-
-# Disable ble.sh on a slow terminal or RDP machine without changing tracked files.
-# export DOTFILES_ENABLE_BLESH=0

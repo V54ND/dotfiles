@@ -13,9 +13,6 @@
 !check.ps1
 !scoop.json
 
-!install-blesh.sh
-
-
 # Small user-facing executables shipped with the dotfiles.
 !.local/
 !.local/bin/
@@ -31,10 +28,6 @@
 .config/bash/local.bash
 !.config/bash/docs/generated/
 !.config/bash/docs/generated/*
-
-!.config/blesh/
-!.config/blesh/*
-
 
 !.config/nvim/
 !.config/nvim/**
