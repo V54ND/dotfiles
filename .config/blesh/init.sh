@@ -5,6 +5,14 @@ bleopt complete_auto_complete=1
 bleopt complete_auto_delay=300
 bleopt complete_auto_complete_opts-=history-disabled
 
+# Keep transient errors short, silent, and non-flashing.
+bleopt vbell_duration=500
+bleopt edit_bell=vbell
+bleopt vbell_default_message='------ Error ------'
+ble-face -s vbell fg=red
+ble-face -s vbell_flash fg=red
+ble-face -s vbell_erase none
+
 # Keep history synchronized between Bash sessions through ble.sh.
 bleopt history_share=1
 

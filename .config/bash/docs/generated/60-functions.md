@@ -7,14 +7,14 @@
 
 ### compress
 
-Re-encodes video to high-quality 10-bit AV1 with SVT-AV1 while copying audio, subtitles, attachments, and metadata.
+Compresses video from any input format to H.264 MP4 using single-pass, constant-quality encoding.
 
 #### Example
 
 ```bash
-compress video.mp4 clip.mov
-ls | grep -Ei '\.(mp4|mov|mkv)$' | compress
-compress --quality 20 --preset 6 video.mp4
+compress video.mp4 clip.mov recording.mkv
+rg --files -g '*.mp4' -g '*.mov' -g '*.mkv' | compress
+compress --quality 26 --preset medium video.webm
 ```
 
 #### Arguments
@@ -23,12 +23,12 @@ compress --quality 20 --preset 6 video.mp4
 
 #### Exit codes
 
-* **0**: Every video was encoded successfully.
-* **1**: An option was invalid, a dependency was missing, no files were supplied, or at least one file failed.
+* **0**: Every video was compressed successfully.
+* **1**: An option was invalid, a dependency was missing, no files were supplied, or at least one input failed.
 
 #### Output on stdout
 
-* Progress and output file paths.
+* Progress, size reduction, and output file paths.
 
 #### Output on stderr
 

@@ -1,26 +1,28 @@
 # shellcheck shell=bash
 
 # @description
-# Re-encodes video to high-quality 10-bit AV1 with SVT-AV1 while copying audio, subtitles, attachments, and metadata.
+# Compresses video from any input format to H.264 MP4 using single-pass, constant-quality encoding.
 #
 # @arg $@ string Options and video paths. Newline-delimited paths are also accepted from stdin.
 #
 # @example
-#   compress video.mp4 clip.mov
+#   compress video.mp4 clip.mov recording.mkv
 # @example
-#   ls | grep -Ei '\.(mp4|mov|mkv)$' | compress
+#   rg --files -g '*.mp4' -g '*.mov' -g '*.mkv' | compress
 # @example
-#   compress --quality 20 --preset 6 video.mp4
+#   compress --quality 26 --preset medium video.webm
 #
-# @stdout Progress and output file paths.
+# @stdout Progress, size reduction, and output file paths.
 # @stderr Invalid options, missing dependencies, skipped files, and ffmpeg errors.
 #
-# @exitcode 0 Every video was encoded successfully.
-# @exitcode 1 An option was invalid, a dependency was missing, no files were supplied, or at least one file failed.
+# @exitcode 0 Every video was compressed successfully.
+# @exitcode 1 An option was invalid, a dependency was missing, no files were supplied, or at least one input failed.
 compress() {
-  local crf="${COMPRESS_CRF:-18}"
-  local preset="${COMPRESS_PRESET:-4}"
+  local quality="${COMPRESS_CRF:-30}"
+  local preset="${COMPRESS_PRESET:-fast}"
   local file output
+  local directory basename stem
+  local original_size compressed_size reduction
   local failed=0
   local files=()
 
@@ -31,7 +33,7 @@ compress() {
           echo "Error: --quality requires a CRF value" >&2
           return 1
         fi
-        crf="$2"
+        quality="$2"
         shift 2
         ;;
       -p|--preset)
@@ -46,16 +48,18 @@ compress() {
         printf '%s\n' \
           "Usage: compress [OPTIONS] [FILE...]" \
           "" \
-          "High-quality AV1 compression using ffmpeg/libsvtav1." \
-          "Files may be passed as arguments or one path per line through stdin." \
+          "Compresses videos from any input format to H.264 MP4." \
+          "Single-pass CRF encoding balances quality, size, and speed." \
+          "Paths may be passed as arguments or one per line through stdin." \
           "" \
           "Options:" \
-          "  -q, --quality CRF   Quality from 0-63 (default: 18; higher is smaller)" \
-          "  -p, --preset NUM    SVT-AV1 preset from -2 to 13 (default: 4; lower is slower)" \
+          "  -q, --quality CRF   Quality from 0-51 (default: 51; higher is smaller)" \
+          "  -p, --preset NAME   x264 preset (default: fast; faster presets encode faster)" \
           "  -h, --help          Show this help" \
           "" \
           "Environment: COMPRESS_CRF and COMPRESS_PRESET override defaults." \
-          "Output: <input-name>-av1.mkv; source files are never replaced."
+          "Output: <input-name>-compressed.mp4; source files are never replaced." \
+          "The first audio stream is encoded as AAC; other streams are omitted."
         return 0
         ;;
       --)
@@ -74,16 +78,17 @@ compress() {
     esac
   done
 
-  if [[ ! "$crf" =~ ^[0-9]+$ ]] || [ "$((10#$crf))" -gt 63 ]; then
-    echo "Error: Quality must be a number between 0 and 63" >&2
+  if [[ ! "$quality" =~ ^[0-9]+$ ]] || [ "$((10#$quality))" -gt 51 ]; then
+    echo "Error: Quality must be a number between 0 and 51" >&2
     return 1
   fi
-  crf="$((10#$crf))"
+  quality="$((10#$quality))"
 
   case "$preset" in
-    -2|-1|[0-9]|1[0-3]) ;;
+    ultrafast|superfast|veryfast|faster|fast|medium|slow|slower|veryslow) ;;
     *)
-      echo "Error: Preset must be a number between -2 and 13" >&2
+      echo "Error: Invalid preset: $preset" >&2
+      echo "Use: ultrafast, superfast, veryfast, faster, fast, medium, slow, slower, veryslow" >&2
       return 1
       ;;
   esac
@@ -93,8 +98,8 @@ compress() {
     return 1
   fi
 
-  if ! ffmpeg -hide_banner -encoders 2>&1 | grep -q '[[:space:]]libsvtav1[[:space:]]'; then
-    echo "Error: This ffmpeg build does not include libsvtav1" >&2
+  if ! ffmpeg -hide_banner -encoders 2>&1 | grep -q '[[:space:]]libx264[[:space:]]'; then
+    echo "Error: This ffmpeg build does not include libx264" >&2
     return 1
   fi
 
@@ -124,33 +129,55 @@ compress() {
       continue
     fi
 
-    output="${file%.*}-av1.mkv"
+    if [[ "$file" == */* ]]; then
+      directory="${file%/*}/"
+    else
+      directory=""
+    fi
+    basename="${file##*/}"
+    stem="${basename%.*}"
+    [ -n "$stem" ] || stem="$basename"
+    output="${directory}${stem}-compressed.mp4"
+
     if [ -e "$output" ]; then
       echo "Warning: '$output' already exists, skipping" >&2
       failed=1
       continue
     fi
 
-    printf 'Compressing: %s -> %s (AV1 CRF %s, preset %s)\n' "$file" "$output" "$crf" "$preset"
+    original_size=$(wc -c <"$file" 2>/dev/null)
+    original_size="${original_size//[[:space:]]/}"
+
+    printf 'Compressing: %s -> %s (H.264 CRF %s, preset %s)\n' \
+      "$file" "$output" "$quality" "$preset"
 
     if command ffmpeg \
       -hide_banner \
       -nostdin \
       -n \
       -i "$file" \
-      -map '0:v?' \
-      -map '0:a?' \
-      -map '0:s?' \
-      -map '0:t?' \
+      -map '0:v:0' \
+      -map '0:a:0?' \
       -map_metadata 0 \
       -map_chapters 0 \
-      -c copy \
-      -c:v:0 libsvtav1 \
+      -c:v libx264 \
       -preset "$preset" \
-      -crf "$crf" \
-      -pix_fmt yuv420p10le \
+      -crf "$quality" \
+      -pix_fmt yuv420p \
+      -c:a aac \
+      -b:a 128k \
+      -movflags +faststart \
       "$output"; then
-      printf 'Created: %s\n' "$output"
+      compressed_size=$(wc -c <"$output" 2>/dev/null)
+      compressed_size="${compressed_size//[[:space:]]/}"
+
+      if [[ "$original_size" =~ ^[0-9]+$ ]] &&
+        [[ "$compressed_size" =~ ^[0-9]+$ ]] && [ "$original_size" -gt 0 ]; then
+        reduction=$(((original_size - compressed_size) * 100 / original_size))
+        printf 'Created: %s (%s%% size reduction)\n' "$output" "$reduction"
+      else
+        printf 'Created: %s\n' "$output"
+      fi
     else
       rm -f -- "$output"
       failed=1
