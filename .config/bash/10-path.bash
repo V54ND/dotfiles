@@ -1,5 +1,7 @@
 # shellcheck shell=bash
 
+# PATH setup for Scoop shims and locally installed user commands. Entries are
+# prepended only when the directory exists and is not already in PATH.
 # @description
 # Prepends an existing directory to PATH when it is not already present.
 #
@@ -7,6 +9,8 @@
 #
 # @example
 #   _path_prepend "$HOME/.local/bin"
+#
+# @stdout No output on success.
 #
 # @exitcode 0 The directory was added, was already present, or was skipped.
 _path_prepend() {

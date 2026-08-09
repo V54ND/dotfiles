@@ -17,6 +17,14 @@ __history_sync
 
 * **0**: History was synced successfully.
 
+#### Output on stdout
+
+* No output on success.
+
+#### Output on stderr
+
+* History builtin errors.
+
 ### __history_install_prompt_command
 
 Adds the history sync hook to PROMPT_COMMAND unless it is already installed.
@@ -30,4 +38,8 @@ __history_install_prompt_command
 #### Exit codes
 
 * **0**: The hook was installed or was already present.
+
+#### Output on stdout
+
+* No output on success.
 

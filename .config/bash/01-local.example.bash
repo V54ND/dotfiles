@@ -1,5 +1,7 @@
 # shellcheck shell=bash
 
+# Machine-local override template. Copy this file to 01-local.bash; that copy
+# is loaded early and intentionally ignored by Git.
 # Copy this file to 01-local.bash for machine-specific or private settings.
 # 01-local.bash is ignored by git and loads before optional shell features.
 

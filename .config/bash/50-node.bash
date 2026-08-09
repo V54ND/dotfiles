@@ -1,5 +1,6 @@
 # shellcheck shell=bash
 
+# Shortcuts for the common npm lifecycle commands and local project tooling.
 alias ni='npm install'
 alias nr='npm run'
 alias nt='npm test'

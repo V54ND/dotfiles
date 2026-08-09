@@ -1,5 +1,7 @@
 # shellcheck shell=bash
 
+# Initialize zoxide last so it can observe the final PROMPT_COMMAND assembled
+# by Starship and the history module.
 case $- in
   *i*) ;;
   *) return 0 2>/dev/null || exit 0 ;;

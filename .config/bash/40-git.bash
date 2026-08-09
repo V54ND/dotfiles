@@ -1,5 +1,7 @@
 # shellcheck shell=bash
 
+# Git aliases and workflow helpers used from interactive Bash sessions.
+
 unalias gll gcm gswm gswd gup 2>/dev/null || true
 unset -f gll gcm gswm gswd gup 2>/dev/null || true
 

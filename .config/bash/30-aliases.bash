@@ -1,5 +1,7 @@
 # shellcheck shell=bash
 
+# Portable interactive aliases. Tool-specific aliases have conservative
+# fallbacks so the shell remains usable before optional tools are installed.
 alias c='clear'
 alias grep='grep --color=auto'
 alias pbcopy='clip.exe'

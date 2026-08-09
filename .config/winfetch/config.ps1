@@ -1,4 +1,5 @@
-# Compact Kanagawa-themed Winfetch configuration.
+# Compact Kanagawa-themed Winfetch configuration. It shows only the active
+# system drive and Scoop packages, with a custom Windows-colour ASCII mark.
 
 $imgwidth = 22
 $cpustyle = "bartext"
@@ -31,6 +32,7 @@ $CustomAscii = @(
     "                      "
 )
 
+# Custom provider consumed by the "clock" entry in the final module list.
 function info_clock {
     return @{
         title = "Local Time"
@@ -38,6 +40,7 @@ function info_clock {
     }
 }
 
+# Display order for Winfetch modules.
 @(
     "title"
     "dashes"

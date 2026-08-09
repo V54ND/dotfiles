@@ -1,3 +1,4 @@
+-- Keep Neovim on the same Kanagawa theme as the terminal and prompt.
 return {
   {
     "rebelot/kanagawa.nvim",

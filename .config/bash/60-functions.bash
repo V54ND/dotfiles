@@ -1,5 +1,8 @@
 # shellcheck shell=bash
 
+# General-purpose interactive helpers: video compression, pipeline display,
+# failed-test extraction, and directory creation.
+
 # @description
 # Compresses video from any input format to H.264 MP4 using single-pass, constant-quality encoding.
 #

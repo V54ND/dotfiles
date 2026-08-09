@@ -1,5 +1,7 @@
 # shellcheck shell=bash
 
+# Documentation maintenance commands. They read shdoc annotations from Bash
+# source files and write generated Markdown under docs/generated on demand.
 __bash_docs_source="${BASH_SOURCE[0]}"
 __bash_docs_dir="$(cd -- "$(dirname -- "$__bash_docs_source")" && pwd -P)" || __bash_docs_dir=""
 unset __bash_docs_source

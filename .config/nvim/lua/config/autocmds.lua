@@ -1,4 +1,5 @@
--- Autocmds are automatically loaded on the VeryLazy event
+-- Autocmds are loaded on the VeryLazy event. The group below saves modified,
+-- writable buffers when focus or insert mode is left.
 -- Default autocmds that are always set: https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/autocmds.lua
 --
 -- Add any additional autocmds here with `vim.api.nvim_create_autocmd`.
@@ -16,4 +17,3 @@ vim.api.nvim_create_autocmd({ "FocusLost", "InsertLeave" }, {
     end
   end,
 })
-

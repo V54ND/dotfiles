@@ -1,5 +1,7 @@
 # shellcheck shell=bash
 
+# Persistent, shared Bash history. The prompt hook below flushes this session
+# and imports commands written by other open Git Bash sessions.
 export HISTFILE="$HOME/.bash_history"
 export HISTSIZE=50000
 export HISTFILESIZE=100000
@@ -16,6 +18,9 @@ shopt -s lithist
 # @example
 #   __history_sync
 #
+# @stdout No output on success.
+# @stderr History builtin errors.
+#
 # @exitcode 0 History was synced successfully.
 __history_sync() {
   history -a
@@ -27,6 +32,8 @@ __history_sync() {
 #
 # @example
 #   __history_install_prompt_command
+#
+# @stdout No output on success.
 #
 # @exitcode 0 The hook was installed or was already present.
 __history_install_prompt_command() {

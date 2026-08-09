@@ -1,3 +1,4 @@
+-- Prefer a TypeScript source definition over a generated declaration on gd.
 local function goto_source_definition()
   local window = vim.api.nvim_get_current_win()
   local params = vim.lsp.util.make_position_params(window, "utf-16")

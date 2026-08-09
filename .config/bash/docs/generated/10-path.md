@@ -20,3 +20,7 @@ _path_prepend "$HOME/.local/bin"
 
 * **0**: The directory was added, was already present, or was skipped.
 
+#### Output on stdout
+
+* No output on success.
+

@@ -1,13 +1,15 @@
 # shellcheck shell=bash
 
+# Shared XDG directory defaults for Git Bash. Windows-style inherited paths
+# are normalized below so Bash tools can safely use the same variables.
 export XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
 export XDG_CACHE_HOME="${XDG_CACHE_HOME:-$HOME/.cache}"
 export XDG_DATA_HOME="${XDG_DATA_HOME:-$HOME/.local/share}"
 export XDG_STATE_HOME="${XDG_STATE_HOME:-$HOME/.local/state}"
 
-# Environment variables inherited from Windows can use C:/... paths. Most
-# Git Bash tools accept them, but shell frameworks that inspect BASH_SOURCE do
-# not always resolve them correctly, so normalize them once at startup.
+# Environment variables inherited from Windows can use C:/... paths. Most Git
+# Bash tools accept them, but shell code that inspects paths does not always.
+# Normalize once during startup, then remove this private helper.
 _xdg_normalize_path() {
   case "$1" in
     [[:alpha:]]:[\\/]*)

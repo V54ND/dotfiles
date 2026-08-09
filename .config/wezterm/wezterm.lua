@@ -1,17 +1,23 @@
 local wezterm = require("wezterm")
+
+-- Cross-platform WezTerm configuration. Git Bash is the Windows default;
+-- Zsh is the macOS default, with both shells available from the launch menu.
 local mux = wezterm.mux
 local target = wezterm.target_triple
 local is_windows = target:find("windows") ~= nil
 local is_macos = target:find("apple") ~= nil
 
+-- Login shells load the shared dotfiles before presenting an interactive prompt.
 local git_bash = { "C:\\Program Files\\Git\\bin\\bash.exe", "-li" }
 local zsh = { "/bin/zsh", "-l" }
 
+-- Start maximized while retaining WezTerm's normal restore/session behavior.
 wezterm.on("gui-startup", function(cmd)
 	local _, _, window = mux.spawn_window(cmd or {})
 	window:gui_window():maximize()
 end)
 
+-- config_builder enables validation and editor type hints in recent WezTerm.
 local config = wezterm.config_builder()
 
 -- 🎨 Цветовые схемы

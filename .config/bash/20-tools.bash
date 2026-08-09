@@ -1,10 +1,13 @@
 # shellcheck shell=bash
 
+# Interactive tool integration. Load completion before Starship, then append
+# the history sync hook so the prompt retains the previous command status.
 case $- in
   *i*) ;;
   *) return 0 2>/dev/null || exit 0 ;;
 esac
 
+# Prefer the Git Bash completion shipped with Git, then use a system fallback.
 for completion_file in \
   /usr/share/bash-completion/completions/git \
   /mingw64/share/git/completion/git-completion.bash
@@ -17,6 +20,7 @@ do
 done
 unset completion_file
 
+# Fzf supplies Ctrl-R history search and shell key bindings when installed.
 if command -v fzf >/dev/null 2>&1; then
   eval "$(fzf --bash)"
 fi
