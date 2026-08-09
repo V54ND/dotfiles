@@ -3,10 +3,23 @@
 
 # Top-level dotfiles and manifests.
 !.gitignore
+!.gitattributes
+!.editorconfig
 !README.md
+!.bash_profile
 !.bashrc
 !.zshrc
+!bootstrap.ps1
+!check.ps1
 !scoop.json
+
+!install-blesh.sh
+
+
+# Small user-facing executables shipped with the dotfiles.
+!.local/
+!.local/bin/
+!.local/bin/dotfiles-doctor
 
 # Selected config files and directories.
 !.config/
@@ -14,9 +27,13 @@
 !.config/bash/
 !.config/bash/*
 .config/bash/99-local.bash
+.config/bash/01-local.bash
 .config/bash/local.bash
 !.config/bash/docs/generated/
 !.config/bash/docs/generated/*
+
+!.config/blesh/
+!.config/blesh/*
 
 
 !.config/nvim/

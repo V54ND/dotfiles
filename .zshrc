@@ -7,8 +7,8 @@ ZSH_THEME="agnoster"
 # Plugins
 plugins=(git)
 
-# Source oh-my-zsh
-source "$ZSH/oh-my-zsh.sh"
+# Source oh-my-zsh when it is installed.
+[[ -r "$ZSH/oh-my-zsh.sh" ]] && source "$ZSH/oh-my-zsh.sh"
 
 unalias gup 2>/dev/null || true
 unfunction git_develop_branch gup 2>/dev/null || true
@@ -79,8 +79,7 @@ gup() {
 
 #
 #
-export ANDROID_HOME=$HOME/Library/Android/sdk
-export PATH=$PATH:$ANDROID_HOME/emulator
-export PATH=$PATH:$ANDROID_HOME/platform-tools
+export ANDROID_HOME="$HOME/Library/Android/sdk"
+export PATH="$PATH:$ANDROID_HOME/emulator:$ANDROID_HOME/platform-tools"
 
-eval "$(zoxide init zsh)"°
+command -v zoxide >/dev/null 2>&1 && eval "$(zoxide init zsh)"

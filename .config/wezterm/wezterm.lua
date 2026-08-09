@@ -1,13 +1,15 @@
 local wezterm = require("wezterm")
-local gitbash = { "C:\\Program Files\\Git\\bin\\bash.exe", "-li" }
+local mux = wezterm.mux
+local target = wezterm.target_triple
+local is_windows = target:find("windows") ~= nil
+local is_macos = target:find("apple") ~= nil
+
+local git_bash = { "C:\\Program Files\\Git\\bin\\bash.exe", "-li" }
 local zsh = { "/bin/zsh", "-l" }
 
-local mux = wezterm.mux
-
 wezterm.on("gui-startup", function(cmd)
-	local tab, pane, window = mux.spawn_window(cmd or {})
+	local _, _, window = mux.spawn_window(cmd or {})
 	window:gui_window():maximize()
-	-- pane:split { direction = 'Right', size = 0.5 }
 end)
 
 local config = wezterm.config_builder()
@@ -25,38 +27,31 @@ config.window_close_confirmation = 'NeverPrompt'
 config.prefer_to_spawn_tabs = true
 config.window_background_opacity = 0.9
 
--- 🚀 Меню запуска
-config.launch_menu = {
-	{
-		label = "Powershell",
-		args = { "powershell" },
-	},
-	{
-		label = "Git Bash",
-		args = gitbash,
-	},
-	{
-		label = "Bash (macOS)",
-		args = { "/bin/bash", "-l" },
-    },
-	{
-		label = "Zsh (macOS)",
-		args = zsh,
-	},
-	{
-		label = "Fish (macOS)",
-		args = { "/usr/local/bin/fish", "-l" },
-	},
-}
-
--- 🐚 По умолчанию — Git Bash
--- Определяем ОС
-local target = wezterm.target_triple
-
-if target:find("windows") then
-	config.default_prog = gitbash
-elseif target:find("apple") or target:find("darwin") then
-	config.default_prog = { "/bin/zsh", "-l" }
+-- 🚀 Меню запуска и shell по умолчанию для каждой ОС
+if is_windows then
+	config.default_prog = git_bash
+	config.launch_menu = {
+		{
+			label = "PowerShell",
+			args = { "powershell.exe", "-NoLogo" },
+		},
+		{
+			label = "Git Bash",
+			args = git_bash,
+		},
+	}
+elseif is_macos then
+	config.default_prog = zsh
+	config.launch_menu = {
+		{
+			label = "Zsh",
+			args = zsh,
+		},
+		{
+			label = "Bash",
+			args = { "/bin/bash", "-l" },
+		},
+	}
 end
 
 
@@ -66,9 +61,6 @@ config.font_size = 12
 
 -- -- 📜 Scrollback
 config.scrollback_lines = 5000
-
--- -- 🌈 TERM для Git Bash
-config.term = "xterm-256color"
 
 -- ⌨️ Горячие клавиши
 config.keys = {
@@ -80,30 +72,16 @@ config.keys = {
 	{ key = "v", mods = "CTRL|SHIFT", action = wezterm.action { PasteFrom = "Clipboard" } },
 }
 
--- 🏷 Динамические заголовки табов
-wezterm.on("format-tab-title", function(tab, tabs, panes, config, hover, max_width)
+-- 🏷 Имя текущей директории в заголовке таба
+wezterm.on("format-tab-title", function(tab)
 	local title = tab.active_pane.title
 	local cwd_uri = tab.active_pane.current_working_dir
-	local cwd = ""
 
 	if cwd_uri then
-		cwd = cwd_uri.file_path:gsub("^.+\\", "") -- только имя папки
-	end
-
-	if cwd ~= "" then
-		title = cwd
-	end
-
-	-- пробуем достать git ветку (асинхронно в shell)
-	if tab.active_pane.domain_name == "local" and cwd_uri then
-		local success, stdout, _ = wezterm.run_child_process({
-			"git", "-C", cwd_uri.file_path, "rev-parse", "--abbrev-ref", "HEAD"
-		})
-		if success and stdout and #stdout > 0 then
-			local branch = stdout:gsub("%s+", "")
-			if branch ~= "HEAD" then
-				title = title .. "  " .. branch
-			end
+		local path = cwd_uri.file_path:gsub("\\", "/"):gsub("/+$", "")
+		local cwd = path:match("([^/]+)$")
+		if cwd and cwd ~= "" then
+			title = cwd
 		end
 	end
 

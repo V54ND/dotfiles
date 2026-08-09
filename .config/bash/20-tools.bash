@@ -10,17 +10,21 @@ for completion_file in \
   /mingw64/share/git/completion/git-completion.bash
 do
   if [ -r "$completion_file" ]; then
+    # shellcheck disable=SC1090
     source "$completion_file"
     break
   fi
 done
 unset completion_file
 
-command -v fzf >/dev/null 2>&1 && eval "$(fzf --bash)"
-command -v atuin >/dev/null 2>&1 && eval "$(atuin init bash)"
+if [ -z "${BLE_VERSION:-}" ] && command -v fzf >/dev/null 2>&1; then
+  eval "$(fzf --bash)"
+fi
 
 command -v starship >/dev/null 2>&1 && eval "$(starship init bash)"
 
-if declare -F __history_install_prompt_command >/dev/null 2>&1; then
+if [ -z "${BLE_VERSION:-}" ] && \
+  declare -F __history_install_prompt_command >/dev/null 2>&1
+then
   __history_install_prompt_command
 fi

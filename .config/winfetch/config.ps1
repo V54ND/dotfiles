@@ -1,85 +1,42 @@
-# ===== WINFETCH CONFIGURATION =====
+# Compact Kanagawa-themed Winfetch configuration.
 
-# $image = "~/winfetch.png"
-# $noimage = $true
+$imgwidth = 22
+$cpustyle = "bartext"
+$memorystyle = "bartext"
+$diskstyle = "bartext"
+$batterystyle = "bartext"
 
-# Display image using ASCII characters
-# $ascii = $true
+$ShowDisks = @($env:SystemDrive)
+$ShowPkgs = @("scoop")
 
-# Set the version of Windows to derive the logo from.
-# $logo = "Windows 10"
+$esc = [char]0x1B
+$reset = "$esc[0m"
+$blue = "$esc[38;2;126;156;216m"
+$violet = "$esc[38;2;149;127;184m"
+$aqua = "$esc[38;2;106;149;137m"
+$pink = "$esc[38;2;210;126;153m"
+$white = "$esc[38;2;220;215;186m"
 
-# Specify width for image/logo
-# $imgwidth = 24
+$CustomAscii = @(
+    "                      "
+    "   ${blue}#######${reset} ${violet}#######${reset}    "
+    "   ${blue}#######${reset} ${violet}#######${reset}    "
+    "   ${blue}#######${reset} ${violet}#######${reset}    "
+    "                      "
+    "   ${aqua}#######${reset} ${pink}#######${reset}    "
+    "   ${aqua}#######${reset} ${pink}#######${reset}    "
+    "   ${aqua}#######${reset} ${pink}#######${reset}    "
+    "                      "
+    "        ${white}WINDOWS${reset}       "
+    "                      "
+)
 
-# Specify minimum alpha value for image pixels to be visible
-# $alphathreshold = 50
-
-# Custom ASCII Art
-# This should be an array of strings, with positive
-# height and width equal to $imgwidth defined above.
-# $CustomAscii = @(
-#     "⠀⠀⠀⠀⠀⠀ ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢠⣾⣿⣦⠀ ⠀"
-#     "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢠⣶⣶⣾⣷⣶⣆⠸⣿⣿⡟⠀ ⠀"
-#     "⠀⠀⠀⠀⠀⠀⠀⠀⣠⣾⣷⡈⠻⠿⠟⠻⠿⢿⣷⣤⣤⣄⠀⠀ ⠀"
-#     "⠀⠀⠀⠀⠀⠀⠀⣴⣿⣿⠟⠁⠀⠀⠀⠀⠀⠀⠈⠻⣿⣿⣦⠀ ⠀"
-#     "⠀⠀⠀⢀⣤⣤⡘⢿⣿⡏⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢹⣿⣿⡇ ⠀"
-#     "⠀⠀⠀⣿⣿⣿⡇⢸⣿⡁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢈⣉⣉⡁ ⠀"
-#     "⠀⠀⠀⠈⠛⠛⢡⣾⣿⣇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣸⣿⣿⡇ ⠀"
-#     "⠀⠀⠀⠀⠀⠀⠀⠻⣿⣿⣦⡀⠀⠀⠀⠀⠀⠀⢀⣴⣿⣿⠟⠀ ⠀"
-#     "⠀⠀⠀⠀⠀⠀⠀⠀⠙⢿⡿⢁⣴⣶⣦⣴⣶⣾⡿⠛⠛⠋⠀⠀ ⠀"
-#     "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠘⠿⠿⢿⡿⠿⠏⢰⣿⣿⣧⠀⠀ ⠀"
-#     "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠘⢿⣿⠟⠀⠀ ⠀"
-# )
-
-# Make the logo blink
-# $blink = $true
-
-# Display all built-in info segments.
-# $all = $true
-
-# Add a custom info line
-# function info_custom_time {
-#     return @{
-#         title = "Time"
-#         content = (Get-Date)
-#     }
-# }
-
-# Configure which disks are shown
-# $ShowDisks = @("C:", "D:")
-# Show all available disks
-# $ShowDisks = @("*")
-
-# Configure which package managers are shown
-# disabling unused ones will improve speed
-# $ShowPkgs = @("winget", "scoop", "choco")
-
-# Use the following option to specify custom package managers.
-# Create a function with that name as suffix, and which returns
-# the number of packages. Two examples are shown here:
-# $CustomPkgs = @("cargo", "just-install")
-# function info_pkg_cargo {
-#     return (cargo install --list | Where-Object {$_ -like "*:" }).Length
-# }
-# function info_pkg_just-install {
-#     return (just-install list).Length
-# }
-
-# Configure how to show info for levels
-# Default is for text only.
-# 'bar' is for bar only.
-# 'textbar' is for text + bar.
-# 'bartext' is for bar + text.
-# $cpustyle = 'bar'
-# $memorystyle = 'textbar'
-# $diskstyle = 'bartext'
-# $batterystyle = 'bartext'
-
-
-# Remove the '#' from any of the lines in
-# the following to **enable** their output.
-
+function info_clock {
+    return @{
+        title = "Local Time"
+        content = (Get-Date -Format "ddd, dd MMM yyyy  HH:mm")
+    }
+}
 
 @(
     "title"
@@ -88,9 +45,13 @@
     "computer"
     "kernel"
     "uptime"
+    "clock"
+    "pkgs"
     "pwsh"
     "terminal"
+    "resolution"
     "cpu"
+    "cpu_usage"
     "gpu"
     "memory"
     "disk"

@@ -18,8 +18,8 @@ shopt -s lithist
 #
 # @exitcode 0 History was synced successfully.
 __history_sync() {
-  builtin history -a
-  builtin history -n
+  history -a
+  history -n
 }
 
 # @description

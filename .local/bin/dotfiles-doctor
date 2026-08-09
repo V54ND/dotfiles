@@ -1,0 +1,197 @@
+#!/usr/bin/env bash
+# shellcheck shell=bash
+
+set -u
+
+failures=0
+warnings=0
+
+if [ -t 1 ] && command -v tput >/dev/null 2>&1; then
+  green=$(tput setaf 2)
+  yellow=$(tput setaf 3)
+  red=$(tput setaf 1)
+  reset=$(tput sgr0)
+else
+  green=''
+  yellow=''
+  red=''
+  reset=''
+fi
+
+ok() {
+  printf '%s[ok]%s %s\n' "$green" "$reset" "$1"
+}
+
+warn() {
+  warnings=$((warnings + 1))
+  printf '%s[warn]%s %s\n' "$yellow" "$reset" "$1"
+}
+
+fail() {
+  failures=$((failures + 1))
+  printf '%s[fail]%s %s\n' "$red" "$reset" "$1"
+}
+
+check_command() {
+  if command -v "$1" >/dev/null 2>&1; then
+    ok "$1"
+  else
+    fail "missing required command: $1"
+  fi
+}
+
+check_optional_command() {
+  if command -v "$1" >/dev/null 2>&1; then
+    ok "$1 (optional)"
+  else
+    warn "optional command is not installed: $1"
+  fi
+}
+
+printf 'Dotfiles doctor\n\nRequired commands:\n'
+
+required_commands=(
+  git
+  starship
+  zoxide
+  fzf
+  eza
+  bat
+  lazygit
+  delta
+  rg
+  fd
+  jq
+  yazi
+  nvim
+)
+
+for command_name in "${required_commands[@]}"; do
+  check_command "$command_name"
+done
+
+case "$(uname -s 2>/dev/null || printf unknown)" in
+  MINGW*|MSYS*|CYGWIN*)
+    check_command scoop
+    check_command wezterm
+    check_command winfetch
+    check_command gcc
+    ;;
+  Darwin*)
+    check_command brew
+    check_command cc
+    ;;
+  *)
+    check_optional_command cc
+    ;;
+esac
+
+printf '\nOptional helpers:\n'
+
+optional_commands=(
+  ffmpeg
+  magick
+  yt-dlp
+  glow
+  shellcheck
+  shdoc
+  tree-sitter
+)
+
+for command_name in "${optional_commands[@]}"; do
+  check_optional_command "$command_name"
+done
+
+printf '\nble.sh:\n'
+
+case "${DOTFILES_ENABLE_BLESH:-1}" in
+  0|false|no|off)
+    ok 'disabled by DOTFILES_ENABLE_BLESH'
+    ;;
+  *)
+    blesh_file="${XDG_DATA_HOME:-$HOME/.local/share}/blesh/ble.sh"
+    case "$blesh_file" in
+      [[:alpha:]]:[\\/]*) blesh_file=$(cygpath -u "$blesh_file") ;;
+    esac
+    if [ -r "$blesh_file" ]; then
+      ok 'installed (completion, history sharing, and fzf integration enabled)'
+      if bash -c 'source -- "$1" --lib && source -- "$2"' \
+        _ "$blesh_file" "$HOME/.config/blesh/init.sh"
+      then
+        ok 'configuration loads'
+      else
+        fail 'configuration does not load'
+      fi
+    else
+      warn 'not installed; run bash ~/install-blesh.sh or disable it with DOTFILES_ENABLE_BLESH=0'
+    fi
+    unset blesh_file
+    ;;
+esac
+
+printf '\nConfiguration:\n'
+
+config_files=(
+  "$HOME/.bash_profile"
+  "$HOME/.bashrc"
+  "$HOME/.zshrc"
+  "$HOME/.config/blesh/init.sh"
+  "$HOME/.config/starship.toml"
+  "$HOME/.config/nvim/init.lua"
+  "$HOME/.config/wezterm/wezterm.lua"
+)
+
+for config_file in "${config_files[@]}"; do
+  if [ -r "$config_file" ]; then
+    ok "${config_file#"$HOME/"}"
+  else
+    fail "missing config: $config_file"
+  fi
+done
+
+if [ -r "$HOME/.config/bash/01-local.bash" ]; then
+  ok '.config/bash/01-local.bash'
+else
+  warn 'no machine-local .config/bash/01-local.bash (copy the example if needed)'
+fi
+
+if bash -n \
+  "$HOME/.bash_profile" \
+  "$HOME/.bashrc" \
+  "$HOME"/.config/bash/*.bash \
+  "$HOME/.config/blesh/init.sh"
+then
+  ok 'Bash syntax'
+else
+  fail 'Bash syntax check failed'
+fi
+
+if command -v zsh >/dev/null 2>&1; then
+  if zsh -n "$HOME/.zshrc"; then
+    ok 'Zsh syntax'
+  else
+    fail 'Zsh syntax check failed'
+  fi
+fi
+
+if command -v starship >/dev/null 2>&1; then
+  if STARSHIP_CONFIG="$HOME/.config/starship.toml" starship prompt >/dev/null 2>&1; then
+    ok 'Starship config loads'
+  else
+    fail 'Starship config does not load'
+  fi
+fi
+
+if command -v wezterm >/dev/null 2>&1; then
+  if wezterm --config-file "$HOME/.config/wezterm/wezterm.lua" show-keys --lua >/dev/null 2>&1; then
+    ok 'WezTerm config loads'
+  else
+    fail 'WezTerm config does not load'
+  fi
+fi
+
+printf '\nResult: %d failure(s), %d warning(s).\n' "$failures" "$warnings"
+
+if [ "$failures" -gt 0 ]; then
+  exit 1
+fi

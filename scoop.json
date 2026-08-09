@@ -4,29 +4,29 @@
             "Name": "main",
             "Source": "https://github.com/ScoopInstaller/Main",
             "Updated": {
-                "value": "\/Date(1764275327000)\/",
+                "value": "\/Date(1786264348000)\/",
                 "DisplayHint": 2,
-                "DateTime": "Thursday, November 27, 2025 10:28:47 PM"
+                "DateTime": "Sunday, August 9, 2026 11:32:28 AM"
             },
-            "Manifests": 1413
+            "Manifests": 1624
         },
         {
             "Name": "extras",
             "Source": "https://github.com/ScoopInstaller/Extras",
             "Updated": {
-                "value": "\/Date(1764275316000)\/",
+                "value": "\/Date(1786264327000)\/",
                 "DisplayHint": 2,
-                "DateTime": "Thursday, November 27, 2025 10:28:36 PM"
+                "DateTime": "Sunday, August 9, 2026 11:32:07 AM"
             },
-            "Manifests": 2216
+            "Manifests": 2363
         },
         {
             "Name": "nerd-fonts",
             "Source": "https://github.com/matthewjberger/scoop-nerd-fonts",
             "Updated": {
-                "value": "\/Date(1764239336000)\/",
+                "value": "\/Date(1785727958000)\/",
                 "DisplayHint": 2,
-                "DateTime": "Thursday, November 27, 2025 12:28:56 PM"
+                "DateTime": "Monday, August 3, 2026 6:32:38 AM"
             },
             "Manifests": 367
         }
@@ -36,50 +36,22 @@
             "Info": "",
             "Source": "main",
             "Name": "7zip",
-            "Version": "25.01",
-            "Updated": "\/Date(1758114301848)\/"
+            "Version": "26.02",
+            "Updated": "\/Date(1786277109533)\/"
         },
         {
             "Info": "",
             "Source": "main",
             "Name": "bat",
-            "Version": "0.25.0",
-            "Updated": "\/Date(1758112918761)\/"
-        },
-        {
-            "Info": "",
-            "Source": "extras",
-            "Name": "bitwarden",
-            "Version": "2025.9.0",
-            "Updated": "\/Date(1758612921162)\/"
-        },
-        {
-            "Info": "",
-            "Source": "extras",
-            "Name": "bulk-crap-uninstaller",
-            "Version": "5.9.0",
-            "Updated": "\/Date(1758113626416)\/"
+            "Version": "0.26.1",
+            "Updated": "\/Date(1773092412365)\/"
         },
         {
             "Info": "",
             "Source": "extras",
             "Name": "chromium",
-            "Version": "140.0.7339.186-r1496484",
-            "Updated": "\/Date(1758612962076)\/"
-        },
-        {
-            "Info": "",
-            "Source": "extras",
-            "Name": "coretemp",
-            "Version": "1.18.1",
-            "Updated": "\/Date(1758114710928)\/"
-        },
-        {
-            "Info": "",
-            "Source": "extras",
-            "Name": "crystaldiskinfo",
-            "Version": "9.7.2",
-            "Updated": "\/Date(1758113717100)\/"
+            "Version": "151.0.7922.76-r1654411",
+            "Updated": "\/Date(1786277131625)\/"
         },
         {
             "Info": "",
@@ -91,107 +63,156 @@
         {
             "Info": "",
             "Source": "main",
+            "Name": "dark",
+            "Version": "3.14.1",
+            "Updated": "\/Date(1773092558953)\/"
+        },
+        {
+            "Info": "",
+            "Source": "main",
+            "Name": "delta",
+            "Version": "0.19.2",
+            "Updated": "\/Date(1782508837855)\/"
+        },
+        {
+            "Info": "",
+            "Source": "main",
+            "Name": "dust",
+            "Version": "1.2.4",
+            "Updated": "\/Date(1782508837114)\/"
+        },
+        {
+            "Info": "",
+            "Source": "main",
             "Name": "eza",
-            "Version": "0.23.3",
-            "Updated": "\/Date(1758113719209)\/"
+            "Version": "0.23.5",
+            "Updated": "\/Date(1786277134707)\/"
         },
         {
             "Info": "",
             "Source": "main",
             "Name": "fd",
-            "Version": "10.3.0",
-            "Updated": "\/Date(1758113526474)\/"
+            "Version": "10.4.2",
+            "Updated": "\/Date(1775044450799)\/"
         },
         {
             "Info": "",
             "Source": "main",
             "Name": "ffmpeg",
-            "Version": "8.0",
-            "Updated": "\/Date(1758114375735)\/"
+            "Version": "9.0",
+            "Updated": "\/Date(1786277143774)\/"
         },
         {
             "Info": "",
             "Source": "main",
             "Name": "fzf",
-            "Version": "0.65.2",
-            "Updated": "\/Date(1758113527078)\/"
+            "Version": "0.74.2",
+            "Updated": "\/Date(1786277144990)\/"
+        },
+        {
+            "Info": "",
+            "Source": "main",
+            "Name": "gawk",
+            "Version": "5.4.1",
+            "Updated": "\/Date(1784140616644)\/"
         },
         {
             "Info": "",
             "Source": "main",
             "Name": "gcc",
-            "Version": "13.2.0",
-            "Updated": "\/Date(1764276057851)\/"
+            "Version": "15.2.0",
+            "Updated": "\/Date(1773092506915)\/"
         },
         {
             "Info": "",
             "Source": "main",
             "Name": "gh",
-            "Version": "2.79.0",
-            "Updated": "\/Date(1758113720050)\/"
+            "Version": "2.97.0",
+            "Updated": "\/Date(1786277146018)\/"
         },
         {
             "Info": "",
             "Source": "main",
             "Name": "git",
-            "Version": "2.51.0",
-            "Updated": "\/Date(1758114473089)\/"
+            "Version": "2.55.0.3",
+            "Updated": "\/Date(1786277167359)\/"
+        },
+        {
+            "Info": "",
+            "Source": "main",
+            "Name": "glow",
+            "Version": "2.1.2",
+            "Updated": "\/Date(1784141057919)\/"
+        },
+        {
+            "Info": "",
+            "Source": "main",
+            "Name": "go",
+            "Version": "1.26.5",
+            "Updated": "\/Date(1784140140561)\/"
         },
         {
             "Info": "",
             "Source": "main",
             "Name": "imagemagick",
-            "Version": "7.1.2-3",
-            "Updated": "\/Date(1758114462221)\/"
+            "Version": "7.1.2-29",
+            "Updated": "\/Date(1786277183658)\/"
+        },
+        {
+            "Info": "",
+            "Source": "main",
+            "Name": "innounp",
+            "Version": "2.70.1",
+            "Updated": "\/Date(1786277184456)\/"
         },
         {
             "Info": "",
             "Source": "nerd-fonts",
-            "Name": "Iosevka-NF",
-            "Version": "3.4.0",
-            "Updated": "\/Date(1758114812758)\/"
+            "Name": "JetBrainsMono-NF",
+            "Version": "3.5.0",
+            "Updated": "\/Date(1786277189266)\/"
         },
         {
             "Info": "",
             "Source": "main",
             "Name": "jid",
-            "Version": "0.7.6",
-            "Updated": "\/Date(1758113722016)\/"
+            "Version": "1.1.3",
+            "Updated": "\/Date(1786277190226)\/"
         },
         {
             "Info": "",
             "Source": "main",
             "Name": "jq",
-            "Version": "1.8.1",
-            "Updated": "\/Date(1758113722350)\/"
+            "Version": "1.8.2",
+            "Updated": "\/Date(1786277190835)\/"
         },
         {
             "Info": "",
             "Source": "extras",
-            "Name": "localsend",
-            "Version": "1.17.0",
-            "Updated": "\/Date(1758113723982)\/"
+            "Name": "lazygit",
+            "Version": "0.64.0",
+            "Updated": "\/Date(1786277201005)\/"
+        },
+        {
+            "Info": "",
+            "Source": "main",
+            "Name": "less",
+            "Version": "704",
+            "Updated": "\/Date(1781610165430)\/"
+        },
+        {
+            "Info": "",
+            "Source": "nerd-fonts",
+            "Name": "Monaspace-NF-Mono",
+            "Version": "3.5.0",
+            "Updated": "\/Date(1786277225930)\/"
         },
         {
             "Info": "",
             "Source": "main",
             "Name": "neovim",
-            "Version": "0.11.4",
-            "Updated": "\/Date(1758113728500)\/"
-        },
-        {
-            "Info": "",
-            "Source": "extras",
-            "Name": "nilesoft-shell",
-            "Version": "1.9.18",
-            "Updated": "\/Date(1758113732338)\/"
-        },
-        {
-            "Info": "",
-            "Source": "extras",
-            "Name": "notion",
-            "Version": "4.20.0",
-            "Updated": "\/Date(1758114307398)\/"
+            "Version": "0.12.4",
+            "Updated": "\/Date(1786277232875)\/"
         },
         {
             "Info": "",
@@ -202,66 +223,45 @@
         },
         {
             "Info": "",
-            "Source": "extras",
-            "Name": "picotorrent",
-            "Version": "0.25.0",
-            "Updated": "\/Date(1758114713077)\/"
-        },
-        {
-            "Info": "",
-            "Source": "extras",
-            "Name": "powertoys",
-            "Version": "0.94.1",
-            "Updated": "\/Date(1758225760997)\/"
-        },
-        {
-            "Info": "",
             "Source": "main",
             "Name": "python",
-            "Version": "3.13.7",
-            "Updated": "\/Date(1758113756380)\/"
+            "Version": "3.14.7",
+            "Updated": "\/Date(1786277272561)\/"
         },
         {
             "Info": "",
             "Source": "main",
             "Name": "ripgrep",
-            "Version": "14.1.1",
-            "Updated": "\/Date(1758113527682)\/"
+            "Version": "15.2.0",
+            "Updated": "\/Date(1786277273545)\/"
         },
         {
             "Info": "",
-            "Source": "extras",
-            "Name": "rufus",
-            "Version": "4.9",
-            "Updated": "\/Date(1758113756930)\/"
+            "Source": "main",
+            "Name": "shellcheck",
+            "Version": "0.11.0",
+            "Updated": "\/Date(1784139890449)\/"
         },
         {
             "Info": "",
-            "Source": "nerd-fonts",
-            "Name": "SarasaGothic",
-            "Version": "1.0.35",
-            "Updated": "\/Date(1764276915553)\/"
+            "Source": "main",
+            "Name": "starship",
+            "Version": "1.26.0",
+            "Updated": "\/Date(1786277275706)\/"
         },
         {
             "Info": "",
             "Source": "main",
             "Name": "tailspin",
-            "Version": "5.5.0",
-            "Updated": "\/Date(1758113757546)\/"
+            "Version": "7.0.0",
+            "Updated": "\/Date(1786277276462)\/"
         },
         {
             "Info": "",
-            "Source": "extras",
-            "Name": "vlc",
-            "Version": "3.0.21",
-            "Updated": "\/Date(1758114717223)\/"
-        },
-        {
-            "Info": "",
-            "Source": "extras",
-            "Name": "wezterm",
-            "Version": "20240203-110809-5046fc22",
-            "Updated": "\/Date(1758114104852)\/"
+            "Source": "main",
+            "Name": "tokei",
+            "Version": "12.1.2",
+            "Updated": "\/Date(1782508818921)\/"
         },
         {
             "Info": "",
@@ -273,23 +273,23 @@
         {
             "Info": "",
             "Source": "main",
-            "Name": "youtube-dl",
-            "Version": "2021.12.17",
-            "Updated": "\/Date(1758113758681)\/"
+            "Name": "yazi",
+            "Version": "26.5.6",
+            "Updated": "\/Date(1782641095621)\/"
         },
         {
             "Info": "",
             "Source": "main",
             "Name": "yt-dlp",
-            "Version": "2025.09.05",
-            "Updated": "\/Date(1758113759254)\/"
+            "Version": "2026.07.04",
+            "Updated": "\/Date(1786277279439)\/"
         },
         {
             "Info": "",
             "Source": "main",
             "Name": "zoxide",
-            "Version": "0.9.8",
-            "Updated": "\/Date(1758113527982)\/"
+            "Version": "0.10.0",
+            "Updated": "\/Date(1786277280059)\/"
         }
     ]
 }

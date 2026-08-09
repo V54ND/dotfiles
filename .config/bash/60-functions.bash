@@ -1,293 +1,164 @@
 # shellcheck shell=bash
 
 # @description
-# Formats a byte count with numfmt when available and falls back to a plain byte label.
+# Re-encodes video to high-quality 10-bit AV1 with SVT-AV1 while copying audio, subtitles, attachments, and metadata.
 #
-# @arg $1 integer Byte count to format.
+# @arg $@ string Options and video paths. Newline-delimited paths are also accepted from stdin.
 #
 # @example
-#   _compress_human_size 1048576
+#   compress video.mp4 clip.mov
+# @example
+#   ls | grep -Ei '\.(mp4|mov|mkv)$' | compress
+# @example
+#   compress --quality 20 --preset 6 video.mp4
 #
-# @stdout The formatted size.
+# @stdout Progress and output file paths.
+# @stderr Invalid options, missing dependencies, skipped files, and ffmpeg errors.
 #
-# @exitcode 0 The size was printed.
-_compress_human_size() {
-  if command -v numfmt >/dev/null 2>&1; then
-    numfmt --to=iec "$1"
-  else
-    printf '%s bytes' "$1"
-  fi
-}
+# @exitcode 0 Every video was encoded successfully.
+# @exitcode 1 An option was invalid, a dependency was missing, no files were supplied, or at least one file failed.
+compress() {
+  local crf="${COMPRESS_CRF:-18}"
+  local preset="${COMPRESS_PRESET:-4}"
+  local file output
+  local failed=0
+  local files=()
 
-# @description
-# Reads file paths from stdin, removes trailing carriage returns, and skips empty lines.
-#
-# @example
-#   printf '%s\r\n' video.mp4 | _compress_read_stdin
-#
-# @stdout Normalized non-empty input lines.
-#
-# @exitcode 0 Input was consumed successfully.
-_compress_read_stdin() {
-  local line
-  while IFS= read -r line || [ -n "$line" ]; do
-    line="${line%$'\r'}"
-    [ -n "$line" ] && printf '%s\n' "$line"
+  while [ "$#" -gt 0 ]; do
+    case "$1" in
+      -q|--quality)
+        if [ "$#" -lt 2 ]; then
+          echo "Error: --quality requires a CRF value" >&2
+          return 1
+        fi
+        crf="$2"
+        shift 2
+        ;;
+      -p|--preset)
+        if [ "$#" -lt 2 ]; then
+          echo "Error: --preset requires a value" >&2
+          return 1
+        fi
+        preset="$2"
+        shift 2
+        ;;
+      -h|--help)
+        printf '%s\n' \
+          "Usage: compress [OPTIONS] [FILE...]" \
+          "" \
+          "High-quality AV1 compression using ffmpeg/libsvtav1." \
+          "Files may be passed as arguments or one path per line through stdin." \
+          "" \
+          "Options:" \
+          "  -q, --quality CRF   Quality from 0-63 (default: 18; higher is smaller)" \
+          "  -p, --preset NUM    SVT-AV1 preset from -2 to 13 (default: 4; lower is slower)" \
+          "  -h, --help          Show this help" \
+          "" \
+          "Environment: COMPRESS_CRF and COMPRESS_PRESET override defaults." \
+          "Output: <input-name>-av1.mkv; source files are never replaced."
+        return 0
+        ;;
+      --)
+        shift
+        files+=("$@")
+        break
+        ;;
+      -*)
+        echo "Error: Unknown option: $1" >&2
+        return 1
+        ;;
+      *)
+        files+=("$1")
+        shift
+        ;;
+    esac
   done
-}
 
-# @description
-# Compresses one supported video file with ffmpeg and optionally replaces the original file.
-#
-# @arg $1 string Video file to compress.
-# @arg $2 boolean Whether to replace the original file.
-# @arg $3 integer ffmpeg CRF quality value.
-# @arg $4 string ffmpeg encoder preset.
-# @arg $5 boolean Whether to suppress ffmpeg output.
-#
-# @example
-#   _compress_process_file video.mp4 false 23 fast false
-#
-# @stdout Progress and size reduction messages.
-# @stderr Warnings for missing files, unsupported formats, and failed compression.
-#
-# @exitcode 0 The file was compressed successfully.
-# @exitcode 1 The file was missing, unsupported, or skipped.
-_compress_process_file() {
-  local file="$1"
-  local replace="$2"
-  local quality="$3"
-  local preset="$4"
-  local quiet="$5"
-  local extension original_size basename output_file compressed_size reduction
-  local ffmpeg_status=0
-  local ffmpeg_cmd
-
-  if [ ! -f "$file" ]; then
-    echo "Warning: File '$file' does not exist, skipping..." >&2
+  if [[ ! "$crf" =~ ^[0-9]+$ ]] || [ "$((10#$crf))" -gt 63 ]; then
+    echo "Error: Quality must be a number between 0 and 63" >&2
     return 1
   fi
+  crf="$((10#$crf))"
 
-  extension="${file##*.}"
-  case "${extension,,}" in
-    mp4|avi|mov|mkv|wmv|flv|webm|m4v) ;;
+  case "$preset" in
+    -2|-1|[0-9]|1[0-3]) ;;
     *)
-      echo "Warning: '$file' is not a supported video format, skipping..." >&2
+      echo "Error: Preset must be a number between -2 and 13" >&2
       return 1
       ;;
   esac
 
-  basename="${file%.*}"
-  output_file="${basename}-compressed.${extension}"
-  if [ -f "$output_file" ] && [ "$replace" = false ]; then
-    echo "Warning: '$output_file' already exists, skipping..." >&2
+  if ! command -v ffmpeg >/dev/null 2>&1 || ! command -v ffprobe >/dev/null 2>&1; then
+    echo "Error: ffmpeg and ffprobe are required for compress" >&2
     return 1
   fi
 
-  original_size=$(stat -f%z "$file" 2>/dev/null || stat -c%s "$file" 2>/dev/null || echo "unknown")
-  ffmpeg_cmd=(ffmpeg -nostdin -y -i "$file" -c:v libx264 -crf "$quality" -preset "$preset")
-  if [ "$quiet" = true ]; then
-    ffmpeg_cmd+=(-loglevel error)
-  fi
-  ffmpeg_cmd+=("$output_file")
-
-  if [ "$replace" = true ]; then
-    echo "Compressing and replacing: $file (quality: $quality, preset: $preset)"
-  else
-    echo "Compressing: $file -> $output_file (quality: $quality, preset: $preset)"
+  if ! ffmpeg -hide_banner -encoders 2>&1 | grep -q '[[:space:]]libsvtav1[[:space:]]'; then
+    echo "Error: This ffmpeg build does not include libsvtav1" >&2
+    return 1
   fi
 
-  "${ffmpeg_cmd[@]}"
-  ffmpeg_status=$?
-  if [ "$ffmpeg_status" -ne 0 ]; then
-    echo "Compression failed for: $file" >&2
-    return "$ffmpeg_status"
+  if [ ! -t 0 ]; then
+    while IFS= read -r file || [ -n "$file" ]; do
+      file="${file%$'\r'}"
+      [ -n "$file" ] && files+=("$file")
+    done
   fi
 
-  if [ "$original_size" != "unknown" ] && [ -f "$output_file" ]; then
-    compressed_size=$(stat -f%z "$output_file" 2>/dev/null || stat -c%s "$output_file" 2>/dev/null || echo "unknown")
-    if [ "$compressed_size" != "unknown" ] && [ "$original_size" -gt 0 ]; then
-      reduction=$(((original_size - compressed_size) * 100 / original_size))
-      echo "Compression completed: ${reduction}% size reduction ($(_compress_human_size "$original_size") -> $(_compress_human_size "$compressed_size"))"
+  if [ "${#files[@]}" -eq 0 ]; then
+    echo "Usage: compress [OPTIONS] [FILE...] or command | compress" >&2
+    return 1
+  fi
+
+  for file in "${files[@]}"; do
+    if [ ! -f "$file" ]; then
+      echo "Warning: '$file' is not a file, skipping" >&2
+      failed=1
+      continue
     fi
-  fi
 
-  if [ "$replace" = true ]; then
-    mv -- "$output_file" "$file"
-    echo "Original file replaced"
-  fi
-}
+    if ! ffprobe -v error -select_streams v:0 -show_entries stream=index -of csv=p=0 -- "$file" |
+      grep -q .; then
+      echo "Warning: '$file' has no video stream, skipping" >&2
+      failed=1
+      continue
+    fi
 
-# @description
-# Runs video compression for one or more files, optionally scheduling several jobs in parallel.
-#
-# @arg $1 boolean Whether to replace original files.
-# @arg $2 integer ffmpeg CRF quality value.
-# @arg $3 string ffmpeg encoder preset.
-# @arg $4 boolean Whether to suppress ffmpeg output.
-# @arg $5 integer Number of parallel jobs to run.
-# @arg $@ string Video files to process after the first five arguments.
-#
-# @example
-#   _compress_run_queue false 23 fast false 2 video.mp4 clip.mov
-#
-# @stdout Queue progress and per-file compression messages.
-# @stderr Per-file warnings and compression errors.
-#
-# @exitcode 0 All files were processed successfully.
-# @exitcode 1 At least one file failed or was skipped.
-_compress_run_queue() {
-  local replace="$1"
-  local quality="$2"
-  local preset="$3"
-  local quiet="$4"
-  local parallel_jobs="$5"
-  shift 5
+    output="${file%.*}-av1.mkv"
+    if [ -e "$output" ]; then
+      echo "Warning: '$output' already exists, skipping" >&2
+      failed=1
+      continue
+    fi
 
-  local file
-  local failed=0
-  local job_count
-  local pid
-  local pids=()
-  if [ "$parallel_jobs" -le 1 ] || [ "$#" -le 1 ]; then
-    for file in "$@"; do
-      if ! _compress_process_file "$file" "$replace" "$quality" "$preset" "$quiet"; then
-        failed=1
-      fi
-    done
-    return "$failed"
-  fi
+    printf 'Compressing: %s -> %s (AV1 CRF %s, preset %s)\n' "$file" "$output" "$crf" "$preset"
 
-  echo "Processing $# files with $parallel_jobs parallel jobs..."
-  for file in "$@"; do
-    while :; do
-      job_count=$(jobs -pr | wc -l | tr -d '[:space:]')
-      [ -z "$job_count" ] && job_count=0
-      [ "$job_count" -lt "$parallel_jobs" ] && break
-      sleep 0.1
-    done
-    _compress_process_file "$file" "$replace" "$quality" "$preset" "$quiet" &
-    pids+=("$!")
-  done
-
-  for pid in "${pids[@]}"; do
-    if ! wait "$pid"; then
+    if command ffmpeg \
+      -hide_banner \
+      -nostdin \
+      -n \
+      -i "$file" \
+      -map '0:v?' \
+      -map '0:a?' \
+      -map '0:s?' \
+      -map '0:t?' \
+      -map_metadata 0 \
+      -map_chapters 0 \
+      -c copy \
+      -c:v:0 libsvtav1 \
+      -preset "$preset" \
+      -crf "$crf" \
+      -pix_fmt yuv420p10le \
+      "$output"; then
+      printf 'Created: %s\n' "$output"
+    else
+      rm -f -- "$output"
       failed=1
     fi
   done
 
   return "$failed"
 }
-
-# @description
-# Compresses video files passed as arguments or through stdin using ffmpeg.
-#
-# @arg $@ string Options and file paths accepted by compress.
-#
-# @example
-#   compress video.mp4
-# @example
-#   compress -r -q 20 *.mp4
-# @example
-#   find . -type f -name '*.mov' | compress -j 4
-#
-# @stdout Usage text, progress messages, and compression summaries.
-# @stderr Invalid options, missing tools, and per-file warnings.
-#
-# @exitcode 0 Help was shown or all files were compressed successfully.
-# @exitcode 1 Options were invalid, ffmpeg was missing, no files were provided, or a file failed.
-_compress() {
-  local replace=false
-  local quality=23
-  local preset="fast"
-  local quiet=false
-  local parallel_jobs=1
-  local file
-  local files_array=()
-
-  while [[ $1 == -* ]]; do
-    case $1 in
-      -r|--replace)
-        replace=true
-        shift
-        ;;
-      -q|--quality)
-        quality="$2"
-        if ! [[ "$quality" =~ ^[0-9]+$ ]] || [ "$quality" -lt 0 ] || [ "$quality" -gt 51 ]; then
-          echo "Error: Quality must be a number between 0-51" >&2
-          return 1
-        fi
-        shift 2
-        ;;
-      -p|--preset)
-        preset="$2"
-        if ! [[ "$preset" =~ ^(ultrafast|superfast|veryfast|faster|fast|medium|slow|slower|veryslow)$ ]]; then
-          echo "Error: Invalid preset. Use: ultrafast, superfast, veryfast, faster, fast, medium, slow, slower, veryslow" >&2
-          return 1
-        fi
-        shift 2
-        ;;
-      -s|--silent)
-        quiet=true
-        shift
-        ;;
-      -j|--jobs)
-        parallel_jobs="$2"
-        if ! [[ "$parallel_jobs" =~ ^[0-9]+$ ]] || [ "$parallel_jobs" -lt 1 ]; then
-          echo "Error: Jobs must be a positive number" >&2
-          return 1
-        fi
-        shift 2
-        ;;
-      -h|--help)
-        echo "Usage: compress [OPTIONS] <files...> or command | compress [OPTIONS]"
-        echo "Options:"
-        echo "  -r, --replace          Replace original files with compressed versions"
-        echo "  -q, --quality NUM      Set quality (0-51, lower = better quality, default: 23)"
-        echo "  -p, --preset PRESET    Set encoding preset (default: fast)"
-        echo "  -s, --silent           Suppress ffmpeg output"
-        echo "  -j, --jobs NUM         Number of parallel jobs (default: 1)"
-        echo "  -h, --help             Show this help"
-        echo ""
-        echo "Examples:"
-        echo "  compress video.mp4"
-        echo "  compress -r -q 20 *.mp4"
-        echo "  ls -1 | rg '\\.(mp4|mov)$' | compress -p fast"
-        echo "  find . -type f -name '*.mov' | compress -j 4"
-        return 0
-        ;;
-      *)
-        echo "Unknown option: $1" >&2
-        return 1
-        ;;
-    esac
-  done
-
-  if ! command -v ffmpeg >/dev/null 2>&1; then
-    echo "Error: 'ffmpeg' is required for compress" >&2
-    return 1
-  fi
-
-  if [ ! -t 0 ]; then
-    while IFS= read -r file; do
-      files_array+=("$file")
-    done < <(_compress_read_stdin)
-  fi
-
-  if [ "$#" -gt 0 ]; then
-    files_array+=("$@")
-  fi
-
-  if [ "${#files_array[@]}" -eq 0 ]; then
-    echo "Usage: compress [OPTIONS] <files...> or command | compress [OPTIONS]"
-    echo "Use 'compress --help' for more information"
-    return 1
-  fi
-
-  _compress_run_queue "$replace" "$quality" "$preset" "$quiet" "$parallel_jobs" "${files_array[@]}"
-}
-
-alias compress='_compress'
 
 # @description
 # Displays piped input as a trimmed list, with optional numbering, prefixing, and passthrough output.
