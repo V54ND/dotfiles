@@ -6,7 +6,7 @@ export HISTFILE="$HOME/.bash_history"
 export HISTSIZE=50000
 export HISTFILESIZE=100000
 export HISTCONTROL=ignoreboth:erasedups
-export HISTIGNORE="ls:ll:la:l:cd:pwd:exit:clear:c"
+export HISTIGNORE="ls:ll:la:l:cd:cd *:pwd:exit:clear:c"
 
 shopt -s histappend
 shopt -s cmdhist

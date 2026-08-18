@@ -2,8 +2,8 @@
 
 # Git aliases and workflow helpers used from interactive Bash sessions.
 
-unalias gll gcm gswm gswd gup 2>/dev/null || true
-unset -f gll gcm gswm gswd gup 2>/dev/null || true
+unalias gcm gswm gswd gup 2>/dev/null || true
+unset -f gcm gswm gswd gup 2>/dev/null || true
 
 alias gf='git fetch'
 alias gfa='git fetch --all --prune'
@@ -183,7 +183,9 @@ grt() {
 }
 
 # @description
-# Updates the current Git repository by fetching, pruning, fast-forward pulling, and optionally pulling from the develop-style branch.
+# Updates the current branch, then optionally pulls the develop-style branch
+# into it. This intentionally keeps the frequent "sync develop into my branch"
+# workflow in one command.
 #
 # @example
 #   gup
@@ -225,7 +227,7 @@ gup() {
 gswf() {
   local branch
 
-  git fetch --prune --quiet
+  git fetch --prune --quiet || return 1
 
   branch="$(
     {
