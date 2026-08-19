@@ -5,6 +5,10 @@
 alias c='clear'
 alias grep='grep --color=auto'
 
+# Bash expands aliases while parsing name() function definitions. Clear any
+# inherited clipboard aliases so this file remains safe to source repeatedly.
+unalias pbcopy pbpaste 2>/dev/null || true
+
 if command -v clip.exe >/dev/null 2>&1; then
   pbcopy() { clip.exe; }
 fi
