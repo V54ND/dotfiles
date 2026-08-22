@@ -1,0 +1,80 @@
+theme = "rose_pine_moon"
+
+[editor]
+line-number = "relative"
+mouse = true
+cursorline = true
+cursorcolumn = false
+
+bufferline = "multiple"
+color-modes = true
+true-color = true
+
+completion-trigger-len = 1
+idle-timeout = 250
+scrolloff = 8
+
+popup-border = "all"
+end-of-line-diagnostics = "warning"
+
+[editor.file-picker]
+hidden = false
+follow-symlinks = true
+
+[editor.search]
+smart-case = true
+wrap-around = true
+
+[editor.cursor-shape]
+insert = "bar"
+normal = "block"
+select = "underline"
+
+[editor.indent-guides]
+render = true
+character = "┊"
+skip-levels = 1
+
+[editor.soft-wrap]
+enable = false
+
+[editor.lsp]
+display-messages = true
+display-inlay-hints = true
+
+[editor.inline-diagnostics]
+cursor-line = "warning"
+other-lines = "disable"
+
+[editor.statusline]
+left = ["mode", "spinner", "version-control", "file-name"]
+center = ["file-modification-indicator"]
+right = ["diagnostics", "selections", "position", "position-percentage", "file-type"]
+separator = "│"
+
+[keys.normal]
+C-j = "move_line_down"
+C-k = "move_line_up"
+C-s = ":write"
+C-q = ":buffer-close"
+
+[keys.select]
+C-j = "move_line_down"
+C-k = "move_line_up"
+
+[keys.normal.space]
+e = "file_explorer"
+f = "file_picker"
+b = "buffer_picker"
+g = "changed_file_picker"
+"/" = "global_search"
+s = "lsp_or_syntax_symbol_picker"
+S = "lsp_or_syntax_workspace_symbol_picker"
+d = "diagnostics_picker"
+D = "workspace_diagnostics_picker"
+r = "rename_symbol"
+a = "code_action"
+"?" = "command_palette"
+
+[keys.insert]
+C-s = ["normal_mode", ":write"]
