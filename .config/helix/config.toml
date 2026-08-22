@@ -1,4 +1,4 @@
-theme = "ayu_mirage"
+theme = "ayu_mirage_white_linenr"
 
 [editor]
 line-number = "relative"
@@ -16,6 +16,8 @@ scrolloff = 8
 
 popup-border = "all"
 end-of-line-diagnostics = "warning"
+
+shell = ["bash", "-c"]
 
 [editor.file-picker]
 hidden = false
@@ -53,28 +55,13 @@ right = ["diagnostics", "selections", "position", "position-percentage", "file-t
 separator = "│"
 
 [keys.normal]
-C-j = "move_line_down"
-C-k = "move_line_up"
-C-s = ":write"
-C-q = ":buffer-close"
+C-h = "jump_view_left"
+C-j = "jump_view_down"
+C-k = "jump_view_up"
+C-l = "jump_view_right"
 
-[keys.select]
-C-j = "move_line_down"
-C-k = "move_line_up"
+"A-j" = ["extend_to_line_bounds", "delete_selection", "paste_after"]
+"A-k" = ["extend_to_line_bounds", "delete_selection", "move_line_up", "paste_before"]
 
 [keys.normal.space]
-e = "file_explorer"
-f = "file_picker"
-b = "buffer_picker"
-g = "changed_file_picker"
-"/" = "global_search"
-s = "symbol_picker"
-S = "workspace_symbol_picker"
-d = "diagnostics_picker"
-D = "workspace_diagnostics_picker"
-r = "rename_symbol"
-a = "code_action"
-"?" = "command_palette"
-
-[keys.insert]
-C-s = ["normal_mode", ":write"]
+l = '@miw"vygloconsole.log("<C-r>v:", <C-r>v);<esc>'

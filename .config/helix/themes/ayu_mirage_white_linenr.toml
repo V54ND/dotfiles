@@ -1,0 +1,4 @@
+inherits = "ayu_mirage"
+
+"ui.linenr" = { fg = "#FFFFFF" }
+"ui.linenr.selected" = { fg = "#FFFFFF" }

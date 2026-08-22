@@ -33,6 +33,8 @@
 
 !.config/helix
 !.config/helix/*
+!.config/helix/themes
+!.config/helix/themes/*
 
 !.config/nvim/
 !.config/nvim/**
