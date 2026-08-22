@@ -1,6 +1,7 @@
 # shellcheck shell=bash
 
-# Initialize zoxide before the final Starship prompt hook.
+# zoxide must be last: its doctor checks that its hook is directly present in
+# PROMPT_COMMAND, after Starship has installed its own prompt function.
 case $- in
   *i*) ;;
   *) return 0 2>/dev/null || exit 0 ;;

@@ -141,7 +141,9 @@ grt
 
 ### gup
 
-Updates the current Git repository by fetching, pruning, fast-forward pulling, and optionally pulling from the develop-style branch.
+Updates the current branch, then optionally pulls the develop-style branch
+into it. This intentionally keeps the frequent "sync develop into my branch"
+workflow in one command.
 
 #### Example
 

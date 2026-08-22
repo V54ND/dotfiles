@@ -1,6 +1,6 @@
 # shellcheck shell=bash
 
-# Keep Starship last so all other startup files have finished composing hooks.
+# Initialize Starship after the regular shell tools and before zoxide.
 case $- in
   *i*) ;;
   *) return 0 2>/dev/null || exit 0 ;;
