@@ -1,0 +1,8 @@
+# Disable audible + visual bell
+set bell-style none
+
+# Don't beep on failed completion
+set show-all-if-ambiguous on
+set completion-query-items 200
+
+set bell-style none
