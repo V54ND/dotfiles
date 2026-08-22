@@ -10,6 +10,17 @@ export XDG_STATE_HOME="${XDG_STATE_HOME:-$HOME/.local/state}"
 # Environment variables inherited from Windows can use C:/... paths. Most Git
 # Bash tools accept them, but shell code that inspects paths does not always.
 # Normalize once during startup, then remove this private helper.
+# @description
+# Converts an inherited Windows-style path to Git Bash format when cygpath is available.
+#
+# @arg $1 string Windows-style or already-normalized path.
+#
+# @example
+#   _xdg_normalize_path 'C:\\Users\\me\\.config'
+#
+# @stdout The normalized path.
+#
+# @exitcode 0 The path was printed successfully.
 _xdg_normalize_path() {
   case "$1" in
     [[:alpha:]]:[\\/]*)

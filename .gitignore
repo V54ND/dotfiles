@@ -29,6 +29,7 @@
 .config/bash/local.bash
 !.config/bash/docs/generated/
 !.config/bash/docs/generated/*
+!.config/bash/docs/cheatsheet.md
 
 !.config/nvim/
 !.config/nvim/**

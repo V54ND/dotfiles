@@ -4,16 +4,31 @@
 # fallbacks so the shell remains usable before optional tools are installed.
 alias c='clear'
 alias grep='grep --color=auto'
+alias cheatsheet='glow "$XDG_CONFIG_HOME/bash/docs/cheatsheet.md"'
+alias cheat='cheatsheet'
 
 # Bash expands aliases while parsing name() function definitions. Clear any
 # inherited clipboard aliases so this file remains safe to source repeatedly.
 unalias pbcopy pbpaste 2>/dev/null || true
 
 if command -v clip.exe >/dev/null 2>&1; then
+# @description
+# Copies stdin to the Windows clipboard through clip.exe.
+#
+# @stdin Text to copy.
+# @stdout None.
+#
+# @exitcode 0 clip.exe accepted the input.
   pbcopy() { clip.exe; }
 fi
 
 if command -v powershell.exe >/dev/null 2>&1; then
+# @description
+# Prints the current Windows clipboard contents without PowerShell formatting.
+#
+# @stdout Raw clipboard text.
+#
+# @exitcode 0 The clipboard was read successfully.
   pbpaste() { powershell.exe -NoProfile -Command 'Get-Clipboard -Raw'; }
 fi
 

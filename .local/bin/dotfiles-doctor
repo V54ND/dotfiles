@@ -18,20 +18,53 @@ else
   reset=''
 fi
 
+# @description
+# Prints a successful doctor check, using terminal colors when available.
+#
+# @arg $1 string Human-readable check name.
+#
+# @stdout One formatted success line.
+#
+# @exitcode 0 The message was printed.
 ok() {
   printf '%s[ok]%s %s\n' "$green" "$reset" "$1"
 }
 
+# @description
+# Records and prints a non-fatal doctor warning.
+#
+# @arg $1 string Human-readable warning message.
+#
+# @stdout One formatted warning line.
+#
+# @exitcode 0 The warning was recorded and printed.
 warn() {
   warnings=$((warnings + 1))
   printf '%s[warn]%s %s\n' "$yellow" "$reset" "$1"
 }
 
+# @description
+# Records and prints a failed doctor check.
+#
+# @arg $1 string Human-readable failure message.
+#
+# @stdout One formatted failure line.
+#
+# @exitcode 0 The failure was recorded and printed.
 fail() {
   failures=$((failures + 1))
   printf '%s[fail]%s %s\n' "$red" "$reset" "$1"
 }
 
+# @description
+# Checks whether a required command is available on PATH.
+#
+# @arg $1 string Command name to check.
+#
+# @stdout A success or failure line.
+#
+# @exitcode 0 The command was found.
+# @exitcode 1 The command was missing.
 check_command() {
   if command -v "$1" >/dev/null 2>&1; then
     ok "$1"
@@ -40,6 +73,14 @@ check_command() {
   fi
 }
 
+# @description
+# Checks whether an optional command is available on PATH.
+#
+# @arg $1 string Optional command name to check.
+#
+# @stdout A success or warning line.
+#
+# @exitcode 0 The check completed; a missing command is reported as a warning.
 check_optional_command() {
   if command -v "$1" >/dev/null 2>&1; then
     ok "$1 (optional)"

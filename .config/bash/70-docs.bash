@@ -8,6 +8,14 @@ case $- in
 esac
 
 __bash_docs_loaded=0
+# @description
+# Lazily loads the Bash documentation helper implementation.
+#
+# @stdout No output on success.
+# @stderr Missing documentation helper errors.
+#
+# @exitcode 0 The helper was loaded or had already been loaded.
+# @exitcode 1 The helper file was missing or could not be sourced.
 __bash_docs_load() {
   [ "$__bash_docs_loaded" -eq 1 ] && return 0
   local docs_file="$XDG_CONFIG_HOME/bash/docs.sh"

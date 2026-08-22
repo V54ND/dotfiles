@@ -1,3 +1,11 @@
+# @description
+# Records the previous failed command and prints a ble.sh-style status line.
+# Starship calls this function immediately before rendering the next prompt.
+#
+# @stdout A red failure status line when the previous command failed.
+# @stderr Filesystem errors while creating or writing the error log.
+#
+# @exitcode 0 The status was ignored, recorded, or already recorded for this prompt cycle.
 __prompt_error_status() {
     local exit_code=${STARSHIP_CMD_STATUS:-0}
 
@@ -31,6 +39,19 @@ __prompt_error_status() {
 
 starship_precmd_user_func=__prompt_error_status
 
+# @description
+# Displays recent failed commands recorded by the prompt status hook.
+#
+# @arg $1 integer Number of entries to show; defaults to 30.
+#
+# @example
+#   errors
+# @example
+#   errors 100
+#
+# @stdout Recent timestamped command failures, or a message when the log is empty.
+#
+# @exitcode 0 The log was displayed or is empty.
 errors() {
     local log_file="${XDG_STATE_HOME:-$HOME/.local/state}/bash/errors.log"
     if [ ! -s "$log_file" ]; then

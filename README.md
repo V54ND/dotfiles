@@ -52,6 +52,8 @@ Run the repository checks from PowerShell before committing changes:
 - `40-git.bash`: Git aliases and helpers
 - `50-node.bash`: npm aliases
 - `60-functions.bash`: custom functions
+- `70-docs.bash`: lazy documentation helpers
+- `98-starship.bash`: Starship prompt initialization
 - `docs.sh`: Bash function documentation generator and viewer
 - `99-zoxide.bash`: final zoxide initialization
 
@@ -105,6 +107,15 @@ bash_docs_view
 ```
 
 The viewer prefers `glow`, falls back to `bat`, then `less`.
+
+Open the quick daily reference with either alias:
+
+```bash
+cheat
+cheatsheet
+```
+
+Both aliases render `~/.config/bash/docs/cheatsheet.md` through `glow`.
 
 ## Local Config
 

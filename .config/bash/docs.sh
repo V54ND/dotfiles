@@ -65,6 +65,20 @@ bash_docs() {
       -type f \( -name '*.bash' -o -name '*.sh' \) -print0
   )
 
+  # dotfiles-doctor is a standalone executable, but it uses the same shdoc
+  # format and belongs in the same generated reference as the Bash helpers.
+  local doctor_file="$__bash_docs_dir/../../.local/bin/dotfiles-doctor"
+  local doctor_output="$generated_dir/dotfiles-doctor.md"
+  if [ -r "$doctor_file" ]; then
+    if shdoc <"$doctor_file" >"$doctor_output.tmp" && [ -s "$doctor_output.tmp" ]; then
+      mv -- "$doctor_output.tmp" "$doctor_output"
+    else
+      echo "Error: Failed to generate documentation for $doctor_file" >&2
+      rm -f -- "$doctor_output.tmp"
+      had_error=1
+    fi
+  fi
+
   find "$generated_dir" -mindepth 1 -depth -type d -empty -delete
 
   if [ "$had_error" -ne 0 ]; then
