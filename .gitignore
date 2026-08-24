@@ -18,6 +18,7 @@
 !.local/
 !.local/bin/
 !.local/bin/dotfiles-doctor
+!.local/bin/cut_screenshots.sh
 
 # Selected config files and directories.
 !.config/
@@ -46,6 +47,9 @@
 
 !.config/winfetch/
 !.config/winfetch/*
+
+!.config/mpv
+!.config/mpv/*
 
 # Local secrets.
 .env

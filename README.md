@@ -140,4 +140,8 @@ If an application requires Git at the standard Git for Windows path while Scoop 
 
 ```powershell
 New-Item -ItemType SymbolicLink -Path "C:\Program Files\Git" -Target "$env:USERPROFILE\scoop\apps\git\current"
+
+```
+```
+setx MPV_HOME "$env:USERPROFILE\.config\mpv"
 ```
