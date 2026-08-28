@@ -49,7 +49,7 @@
 !.config/winfetch/*
 
 !.config/mpv
-!.config/mpv/*
+!.config/mpv/mpv.conf
 
 # Local secrets.
 .env
