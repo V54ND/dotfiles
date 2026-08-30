@@ -183,14 +183,15 @@ grt() {
 }
 
 # @description
-# Updates the current branch, then optionally pulls the develop-style branch
+# Updates the current branch, then asks whether to merge the develop-style branch
 # into it. This intentionally keeps the frequent "sync develop into my branch"
-# workflow in one command.
+# workflow in one command while requiring a clean working tree.
 #
 # @example
 #   gup
 #
-# @stderr Prints an error when the current directory is not a Git repository.
+# @stderr Prints an error when the current directory is not a Git repository,
+# the working tree is not clean, or a Git update command fails.
 #
 # @exitcode 0 The update completed successfully.
 # @exitcode 1 The current directory is not a Git repository or a Git update command failed.
@@ -200,19 +201,49 @@ gup() {
     return 1
   fi
 
-  local current_branch dev_branch
+  local current_branch dev_branch answer
   current_branch="$(git branch --show-current)" || return 1
-  dev_branch="$(git_develop_branch)"
+
+  if [ -z "$current_branch" ]; then
+    echo "Detached HEAD is not supported by gup" >&2
+    return 1
+  fi
+
+  if [ -n "$(git status --porcelain)" ]; then
+    echo "Working tree is not clean; commit or stash changes before running gup" >&2
+    return 1
+  fi
 
   git fetch --all --prune || return 1
+
+  dev_branch="$(git_develop_branch)"
+
+  if ! git rev-parse --abbrev-ref --symbolic-full-name '@{upstream}' >/dev/null 2>&1; then
+    echo "Current branch has no upstream branch" >&2
+    return 1
+  fi
 
   git pull --ff-only || return 1
 
   if [ -n "$current_branch" ] &&
     [ "$current_branch" != "$dev_branch" ] &&
     [ -n "$dev_branch" ] &&
-    git ls-remote --exit-code --heads origin "$dev_branch" >/dev/null 2>&1; then
-    git pull origin "$dev_branch" || return 1
+    git show-ref --verify --quiet "refs/remotes/origin/$dev_branch"; then
+    if [ ! -t 0 ]; then
+      echo "Non-interactive shell: skipping pull of origin/$dev_branch" >&2
+      return 0
+    fi
+
+    printf 'Pull origin/%s into %s? [y/N] ' "$dev_branch" "$current_branch"
+    read -r answer
+    case "$answer" in
+      y|Y|yes|Yes|YES)
+        git merge --no-edit "origin/$dev_branch" || return 1
+        ;;
+      *)
+        echo "Skipped pulling origin/$dev_branch"
+        ;;
+    esac
   fi
 }
 

@@ -9,7 +9,7 @@
 # With --replace, it replaces an MP4 in place; for other containers it removes
 # the source only after success and writes a same-name .mp4 file instead.
 #
-# @option -r | --replace Replace the input after successful encoding; source files remain intact on failure.
+# @option -r | --replace Replace the input after successful encoding; asks for confirmation before removing sources.
 # @option -q <CRF> | --quality <CRF> Set x264 CRF from 0 to 51; higher values produce smaller, lower-quality files.
 # @option -p <NAME> | --preset <NAME> Set the x264 speed preset from ultrafast through veryslow.
 # @option -h | --help Show usage information without encoding.
@@ -27,7 +27,7 @@
 #   compress --replace recording.mov
 #
 # @stdout Progress plus the created or replaced MP4 path and its size reduction when available.
-# @stderr Invalid options, missing dependencies, skipped files, inability to remove a replaced source, and ffmpeg errors.
+# @stderr Invalid options, missing dependencies, skipped files, replacement confirmation errors, inability to remove a replaced source, and ffmpeg errors.
 #
 # @exitcode 0 Every video was compressed successfully.
 # @exitcode 1 An option was invalid, a dependency was missing, no files were supplied, or at least one input failed.
@@ -73,7 +73,7 @@ compress() {
           "Paths may be passed as arguments or one per line through stdin." \
           "" \
           "Options:" \
-          "  -r, --replace       Remove the source after a successful MP4 encode" \
+          "  -r, --replace       Remove the source after confirmation and successful encode" \
           "  -q, --quality CRF   Quality from 0-51 (default: 30; higher is smaller)" \
           "  -p, --preset NAME   x264 preset (default: fast; faster presets encode faster)" \
           "  -h, --help          Show this help" \
@@ -134,6 +134,28 @@ compress() {
   if [ "${#files[@]}" -eq 0 ]; then
     echo "Usage: compress [OPTIONS] [FILE...] or command | compress" >&2
     return 1
+  fi
+
+  if [ "$replace" = true ]; then
+    if [ ! -r /dev/tty ]; then
+      echo "Error: --replace requires an interactive terminal for confirmation" >&2
+      return 1
+    fi
+
+    local replace_answer
+    printf 'Replace/remove source files after successful encoding? [y/N] ' >&2
+    if ! IFS= read -r replace_answer < /dev/tty; then
+      echo "Replacement canceled" >&2
+      return 1
+    fi
+
+    case "$replace_answer" in
+      y|Y|yes|Yes|YES) ;;
+      *)
+        echo "Replacement canceled" >&2
+        return 1
+        ;;
+    esac
   fi
 
   for file in "${files[@]}"; do

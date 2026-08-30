@@ -27,7 +27,6 @@ $kubernetes\
 $cmd_duration\
 $jobs\
 $battery\
-${custom.error_count}\
 $status\
 $time
 [╰─](bright-black)\
@@ -171,14 +170,6 @@ style = "bold bright-red"
 map_symbol = true
 pipestatus = true
 pipestatus_separator = " "
-
-[custom.error_count]
-description = "Number of failed commands recorded by the Bash prompt hook"
-command = "log=\"${XDG_STATE_HOME:-$HOME/.local/state}/bash/errors.log\"; [ -s \"$log\" ] && wc -l < \"$log\""
-when = "test -s \"${XDG_STATE_HOME:-$HOME/.local/state}/bash/errors.log\""
-format = "[✗$output]($style) "
-style = "bold bright-red"
-shell = ["bash", "--noprofile", "--norc", "-c"]
 
 [time]
 disabled = false
