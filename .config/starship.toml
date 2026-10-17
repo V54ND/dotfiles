@@ -56,13 +56,13 @@ pwsh_indicator = " "
 unknown_indicator = " "
 
 [username]
-show_always = false
+show_always = true
 format = "[$user]($style)[@](bright-black)"
 style_user = "bold bright-purple"
 style_root = "bold bright-red"
 
 [hostname]
-ssh_only = true
+ssh_only = false
 trim_at = "."
 format = "[$hostname]($style) "
 style = "bold bright-cyan"
@@ -163,7 +163,7 @@ threshold = 50
 style = "bold bright-yellow"
 
 [status]
-disabled = false
+disabled = true
 format = "[$symbol$status]($style) "
 symbol = "⨯ "
 style = "bold bright-red"
@@ -180,7 +180,7 @@ style = "bold bright-cyan"
 # Prompt character colour reflects the previous command status.
 [character]
 success_symbol = "[❯](bold bright-green)"
-error_symbol = "[❯](bold bright-red)"
+error_symbol = "[❯](bold bright-green)"
 vimcmd_symbol = "[❮](bold bright-green)"
 vimcmd_replace_one_symbol = "[❮](bold bright-purple)"
 vimcmd_replace_symbol = "[❮](bold bright-purple)"

@@ -80,8 +80,6 @@ $extensionlessTextFiles = @(
 )
 
 Invoke-Check 'tracked-file whitespace' {
-    # Compare the final working tree to HEAD so partially staged fixes are checked
-    # as they exist on disk, not as an intermediate index state.
     Invoke-Native git @('-C', $root, 'diff', 'HEAD', '--check')
 }
 
@@ -133,6 +131,40 @@ Invoke-Check 'JSON syntax' {
     }
 }
 
+Invoke-Check 'Scoop availability' {
+    Invoke-Native scoop @('--version')
+}
+
+Invoke-Check 'Scoop health' {
+    Invoke-Native scoop @('checkup')
+}
+
+Invoke-Check 'Scoop buckets' {
+    $bucketOutput = @(scoop bucket list 2>&1)
+    if ($LASTEXITCODE -ne 0) {
+        throw "scoop bucket list failed: $($bucketOutput -join [Environment]::NewLine)"
+    }
+
+    if (-not ($bucketOutput -match '\bmain\b')) {
+        throw 'Scoop main bucket is not configured.'
+    }
+}
+
+Invoke-Check 'CLI tool commands' {
+    $commands = @(
+        '7z', 'bat', 'eza', 'fd', 'fzf', 'gcc', 'git', 'glow', 'jq',
+        'nvim', 'rg', 'starship', 'winfetch', 'yazi', 'zoxide', 'lazygit'
+    )
+
+    $missing = @($commands | Where-Object {
+        -not (Get-Command $_ -ErrorAction SilentlyContinue)
+    })
+
+    if ($missing.Count -gt 0) {
+        throw "Missing CLI commands: $($missing -join ', ')"
+    }
+}
+
 Invoke-Check 'Lua syntax' {
     $luaFiles = @($files | Where-Object { [IO.Path]::GetExtension($_) -eq '.lua' })
     $quotedLuaFiles = @(
@@ -146,8 +178,10 @@ Invoke-Check 'Lua syntax' {
 
 Invoke-Check 'Starship config' {
     $oldConfig = $env:STARSHIP_CONFIG
+    $oldTerm = $env:TERM
     try {
         $env:STARSHIP_CONFIG = Join-Path $root '.config/starship.toml'
+        $env:TERM = 'xterm-256color'
         Invoke-Native starship @('prompt', '--terminal-width', '100')
     }
     finally {
@@ -157,12 +191,14 @@ Invoke-Check 'Starship config' {
         else {
             $env:STARSHIP_CONFIG = $oldConfig
         }
-    }
-}
 
-Invoke-Check 'WezTerm config' {
-    $config = Join-Path $root '.config/wezterm/wezterm.lua'
-    Invoke-Native wezterm @('--config-file', $config, 'show-keys', '--lua')
+        if ($null -eq $oldTerm) {
+            Remove-Item Env:TERM -ErrorAction SilentlyContinue
+        }
+        else {
+            $env:TERM = $oldTerm
+        }
+    }
 }
 
 Write-Host ''

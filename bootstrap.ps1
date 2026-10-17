@@ -2,8 +2,7 @@
 
 [CmdletBinding(SupportsShouldProcess = $true)]
 param(
-    [switch]$WithOptional,
-    [switch]$SkipWezTerm
+    [switch]$WithOptional
 )
 
 Set-StrictMode -Version Latest
@@ -31,9 +30,9 @@ $scoopRoot = Get-ScoopRoot
 $bucketRoot = Join-Path $scoopRoot 'buckets'
 $failures = [System.Collections.Generic.List[string]]::new()
 
+# Scoop is intentionally limited to CLI tools. UI applications are managed separately.
 $buckets = @(
     @{ Name = 'extras'; Url = 'https://github.com/ScoopInstaller/Extras' }
-    @{ Name = 'nerd-fonts'; Url = 'https://github.com/matthewjberger/scoop-nerd-fonts' }
 )
 
 foreach ($bucket in $buckets) {
@@ -76,8 +75,6 @@ $coreApps = @(
     'main/yt-dlp'
     'main/zoxide'
     'extras/lazygit'
-    'nerd-fonts/JetBrainsMono-NF'
-    'nerd-fonts/Monaspace-NF-Mono'
 )
 
 $optionalApps = @(
@@ -113,24 +110,10 @@ foreach ($app in $apps) {
     }
 }
 
-if (-not $SkipWezTerm -and -not (Get-Command wezterm -ErrorAction SilentlyContinue)) {
-    if (-not (Get-Command winget -ErrorAction SilentlyContinue)) {
-        $failures.Add('wez.wezterm (WinGet is unavailable)')
-    }
-    elseif ($PSCmdlet.ShouldProcess('wez.wezterm', 'winget install')) {
-        & winget install --id wez.wezterm --exact --source winget --accept-package-agreements --accept-source-agreements
-        if ($LASTEXITCODE -ne 0) {
-            $failures.Add('wez.wezterm')
-        }
-    }
-}
-else {
-    Write-Host '[skip] WezTerm'
-}
-
 if ($failures.Count -gt 0) {
     throw "Bootstrap failed for: $($failures -join ', ')"
 }
 
 Write-Host ''
-Write-Host 'Bootstrap complete. Open a new Git Bash and run: dotfiles-doctor'
+Write-Host 'Bootstrap complete. Scoop installed CLI tools only.'
+Write-Host 'UI applications are intentionally not installed by this script.'
