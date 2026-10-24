@@ -21,15 +21,14 @@ end)
 local config = wezterm.config_builder()
 
 -- 🎨 Цветовые схемы
-config.color_scheme = 'Kanagawa (Gogh)'
-
+config.color_scheme = "Catppuccin Mocha"
 
 -- -- 🖥 Tab Bar
 config.use_fancy_tab_bar = true
 config.tab_bar_at_bottom = true
 
 -- 🔧 Поведение окна
-config.window_close_confirmation = 'NeverPrompt'
+config.window_close_confirmation = "NeverPrompt"
 config.prefer_to_spawn_tabs = true
 config.window_background_opacity = 0.9
 
@@ -60,7 +59,6 @@ elseif is_macos then
 	}
 end
 
-
 -- 🔤 Шрифт
 config.font = wezterm.font("MonaspiceNe Nerd Font Mono")
 config.font_size = 12
@@ -70,12 +68,12 @@ config.scrollback_lines = 5000
 
 -- ⌨️ Горячие клавиши
 config.keys = {
-	{ key = "d", mods = "CTRL|ALT",   action = wezterm.action { SplitHorizontal = { domain = "CurrentPaneDomain" } } },
-	{ key = "D", mods = "CTRL|ALT",   action = wezterm.action { SplitVertical = { domain = "CurrentPaneDomain" } } },
-	{ key = "t", mods = "CTRL|ALT",   action = wezterm.action { SpawnTab = "CurrentPaneDomain" } },
-	{ key = "w", mods = "CTRL|ALT",   action = wezterm.action { CloseCurrentPane = { confirm = true } } },
-	{ key = "c", mods = "CTRL|SHIFT", action = wezterm.action { CopyTo = "Clipboard" } },
-	{ key = "v", mods = "CTRL|SHIFT", action = wezterm.action { PasteFrom = "Clipboard" } },
+	{ key = "d", mods = "CTRL|ALT", action = wezterm.action({ SplitHorizontal = { domain = "CurrentPaneDomain" } }) },
+	{ key = "D", mods = "CTRL|ALT", action = wezterm.action({ SplitVertical = { domain = "CurrentPaneDomain" } }) },
+	{ key = "t", mods = "CTRL|ALT", action = wezterm.action({ SpawnTab = "CurrentPaneDomain" }) },
+	{ key = "w", mods = "CTRL|ALT", action = wezterm.action({ CloseCurrentPane = { confirm = true } }) },
+	{ key = "c", mods = "CTRL|SHIFT", action = wezterm.action({ CopyTo = "Clipboard" }) },
+	{ key = "v", mods = "CTRL|SHIFT", action = wezterm.action({ PasteFrom = "Clipboard" }) },
 }
 
 -- 🏷 Имя текущей директории в заголовке таба
