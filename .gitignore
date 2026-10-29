@@ -11,6 +11,7 @@
 !.inputrc
 !.zshrc
 !bootstrap.ps1
+!setup-codex-scoop-node.ps1
 !check.ps1
 !scoop.json
 
